@@ -13,12 +13,15 @@
 | T09 - Validação integrada | Concluída | 12 testes; 32 repetições idênticas; 40.398 unidades úteis por execução |
 | T10 - Experimentos | Concluída | 28 casos base LRU e quatro FIFO |
 | T11 - Relatório | Concluída | PDF, versão Markdown, três gráficos e apêndice com 32 Gantts |
-| T12 - Entrega e defesa | Parcial | README e roteiro prontos; publicação em andamento; AVA pendente |
+| T12 - Entrega e defesa | Parcial | README, roteiro, pacote validado e publicação concluídos; AVA e preparação individual pendentes |
 
 ## Publicação
 
-Destino autorizado: https://github.com/MatheusThurow/SO_m2.git.
-O estado final será atualizado após verificar o envio do commit ao remoto.
+Publicado em https://github.com/MatheusThurow/SO_m2, na branch `codex/trabalho-m2`,
+que se tornou a branch padrão do repositório inicialmente vazio.
+O envio foi confirmado por `git ls-remote`, e a página pública foi aberta sem autenticação.
+Os bytes dos cenários e do PDF foram comparados com os blobs do commit publicado.
+O histórico Git identifica os commits; `validacao/pacote.json` registra execução a partir do ZIP extraído.
 
 ## Pendências externas
 

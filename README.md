@@ -45,6 +45,8 @@ Use `--saida` para preservar rodadas separadas.
 python -m unittest discover -s tests -v
 python experimentos.py
 python gerar_relatorio.py
+python validar_entrega.py
+python empacotar.py
 ```
 
 `experimentos.py` executa 32 configurações e repete cada uma integralmente para verificar
