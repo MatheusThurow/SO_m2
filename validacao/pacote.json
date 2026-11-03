@@ -1,0 +1,11 @@
+{
+  "pacote": "entrega_m2.zip",
+  "integridade_zip": "OK",
+  "testes_extraidos": "12 OK",
+  "cli_extraida": "OK",
+  "cpus": 4,
+  "quadros": 1,
+  "subst": "fifo",
+  "sched": "rr",
+  "quantum": 2
+}

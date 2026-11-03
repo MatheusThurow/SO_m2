@@ -1,6 +1,6 @@
 # Trabalho M2 - Sistemas Operacionais
 
-**Equipe:** Matheus Thurow, Rodrigo Nicola e Eduardo Bez.  
+**Equipe:** Matheus Thurow, Rodrigo Nicola e Eduardo Bez.
 **Projeto:** escalonamento multiprocessado integrado à paginação sob demanda.
 
 ## Instalação e execução
