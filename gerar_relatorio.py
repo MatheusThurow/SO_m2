@@ -60,8 +60,11 @@ def main():
     ax.legend(); fig.tight_layout(); fig.savefig(GRAF/'speedup.png',dpi=180); plt.close(fig)
 
     styles=getSampleStyleSheet()
-    styles.add(ParagraphStyle(name='CorpoM2',fontName='Helvetica',fontSize=10,leading=14,spaceAfter=9))
-    styles.add(ParagraphStyle(name='CelulaM2',fontName='Helvetica',fontSize=7,leading=9))
+    styles['Heading1'].fontName='Times-Bold'
+    styles['Heading1'].fontSize=15
+    styles['Heading1'].leading=18
+    styles.add(ParagraphStyle(name='CorpoM2',fontName='Times-Roman',fontSize=11,leading=14,spaceAfter=8))
+    styles.add(ParagraphStyle(name='CelulaM2',fontName='Times-Roman',fontSize=8,leading=10))
     story=[]; md=[]
     def titulo(t):
         story.append(Paragraph(escape(t),styles['Heading1'])); md.append('\n## '+t+'\n')
@@ -70,12 +73,12 @@ def main():
     def tabela(headers,linhas,widths=None):
         dados=[[Paragraph(escape(str(x)),styles['CelulaM2']) for x in row] for row in [headers]+linhas]
         tab=Table(dados,colWidths=widths,repeatRows=1,hAlign='LEFT')
-        tab.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),colors.HexColor('#16324f')),
-            ('TEXTCOLOR',(0,0),(-1,0),colors.white),('ROWBACKGROUNDS',(0,1),(-1,-1),[colors.white,colors.HexColor('#edf2f7')]),
+        tab.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),colors.HexColor('#e8e8e8')),
+            ('TEXTCOLOR',(0,0),(-1,0),colors.black),
             ('VALIGN',(0,0),(-1,-1),'MIDDLE'),('BOTTOMPADDING',(0,0),(-1,-1),5),('TOPPADDING',(0,0),(-1,-1),5),
-            ('LINEBELOW',(0,0),(-1,0),.5,colors.HexColor('#16324f'))]))
+            ('LINEBELOW',(0,0),(-1,0),.5,colors.black),('LINEBELOW',(0,-1),(-1,-1),.5,colors.black)]))
         # Paragraphs carry their own color, so set the header explicitly.
-        for cell in dados[0]: cell.style=ParagraphStyle(name='Cab',parent=styles['CelulaM2'],textColor=colors.white)
+        for cell in dados[0]: cell.style=ParagraphStyle(name='Cab',parent=styles['CelulaM2'],fontName='Times-Bold',textColor=colors.black)
         story.append(tab); story.append(Spacer(1,10))
         md.append('| '+' | '.join(headers)+' |\n| '+' | '.join(['---']*len(headers))+' |\n'+
                   '\n'.join('| '+' | '.join(str(x) for x in row)+' |' for row in linhas)+'\n')
@@ -88,50 +91,54 @@ def main():
     def f(x): return f'{x:.2f}' if isinstance(x,float) else str(x)
 
     titulo('Simulador de escalonamento multiprocessado com paginação sob demanda')
-    par('Sistemas Operacionais - Trabalho M2 | 03/11/2026')
-    par('Equipe: Matheus Thurow, Rodrigo Nicola e Eduardo Bez.')
-    par('Implementação em Python; 32 configurações executadas e repetidas integralmente, com resultados idênticos. Cada execução concluiu os 1.000 processos e consumiu exatamente 40.398 unidades úteis de CPU.')
-    titulo('Modelo e estruturas de dados')
+    par('Sistemas Operacionais - Trabalho M2 - 03/11/2026')
+    par('Matheus Thurow, Rodrigo Nicola e Eduardo Bez')
+    titulo('1. Introdução')
+    par('Este trabalho apresenta um simulador em Python que reúne escalonamento de CPU e paginação sob demanda. Foram comparados FCFS, SJF e Round Robin em máquinas simuladas com 1 e 4 CPUs, usando as políticas de memória FIFO e LRU. O objetivo foi observar como essas escolhas afetam os tempos dos processos, as faltas de página e o uso das CPUs.')
+    par('Foram usados dois cenários com os mesmos 1.000 processos: no A, todos chegam no instante zero; no B, as chegadas são distribuídas até o instante 10.604. São 952 processos curtos e 48 longos. Cada cenário exige 40.398 unidades de CPU, intercaladas com etapas de E/S.')
+    titulo('2. Funcionamento do simulador')
     par('O motor avança em unidades inteiras, com CPUs simuladas e uma fila global. FCFS/RR usam deque (inserção e retirada O(1)); SJF usa heap pelo burst restante e sequência de entrada (O(log P)). Eventos usam heap por instante e pid. Cada processo mantém o índice de burst e referência, estado e acumuladores de tempo. Nenhuma política consulta o rótulo de classe.')
     par('A memória usa dicionário pelo par (pid, página), com ordem de carga, último acesso e proteção. FIFO/LRU buscam o mínimo entre páginas não protegidas (O(F), com F quadros). Acertos são O(1); liberar um processo percorre os quadros. O motor custa O(C) por tick, além dos eventos e substituições; o log opcional custa mais por registrar os conjuntos completos.')
     par('No instante t, concluem-se os bursts da unidade anterior, liberando páginas dos terminados. Entram chegadas e retornos juntos por pid; depois são tratadas preempções por índice de CPU e os despachos. As CPUs são atendidas por índice: cada uma resolve despacho e acesso antes da próxima; faults não consomem tempo e permitem outro despacho no mesmo instante. Empates de acesso são ordenados pelo índice da CPU.')
     par('A página só é carregada no retorno do fault, após 20 unidades. Retornos no mesmo instante são resolvidos por pid. Sem vítima, tenta-se novamente após 20 unidades sem somar novo fault. A proteção dura até o primeiro acesso efetivo. FIFO e LRU usam sequências totais de operações para desempatar; uma carga protegida recebe a sequência de carga como valor inicial de recência.')
     par('O contexto da CPU é identificado pelo último contexto instalado no despacho, inclusive quando o acesso seguinte produz fault. O primeiro despacho cobra troca; um retorno ao mesmo contexto sem outro despacho não cobra. Com custo zero, nenhuma ocorrência é contada como custo cobrado. Resposta e espera encerram-se no despacho, antes da troca.')
     quebra()
-    titulo('Validação e reprodução')
+    titulo('3. Testes e experimentos')
     par('Os testes automatizados reproduzem o exemplo 7.1 (makespan 13, útil 10, troca 3, espera 4,67 e turnaround 9), o 7.2 (fault de teste = 5, makespan 13, cinco faults, esperas zero) e o 7.3 (esperas médias 3,67 FCFS e 2,33 SJF). O exemplo 5.5 termina em 441, com quatro faults. A latência da CLI de produção permanece fixa em 20.')
     par('Também são testados RR sem concorrentes, chegada no quantum, SJF não preemptivo e empate, FIFO/LRU, quadros protegidos, retentativa sem fault extra e quatro CPUs simultâneas. Asserções em toda execução verificam: útil + troca + ocioso = makespan por CPU; turnaround = espera + útil + troca + bloqueio por processo; todas as referências consumidas e memória liberada ao terminar.')
-    par('Comandos: python -m unittest discover -s tests -v; python experimentos.py; python gerar_relatorio.py. Cada diretório em resultados contém resultado.json, processos.csv, cpus.csv, gantt.csv e gantt.png. O consolidado.csv resume a matriz; ambiente.json contém hashes SHA-256, interpretador e comandos exatos. Tempos reais não são tempos simulados.')
+    par('As 32 configurações foram executadas duas vezes. As repetições produziram os mesmos resultados por processo, por CPU e no Gantt. Em todos os casos, os 1.000 processos terminaram e foram consumidas as 40.398 referências previstas. Os comandos para repetir os testes e os experimentos estão no README do repositório.')
     ambiente=json.loads((BASE/'ambiente.json').read_text(encoding='utf-8'))
-    par(f'Ambiente medido: {ambiente["sistema"]}; Python {ambiente["python"].split()[0]}; {ambiente["processador"]}. Hardware registrado: {ambiente.get("hardware", "consultar ambiente.json")}. As CPUs 1/4 são simuladas sequencialmente, sem paralelismo real.')
+    hardware=ambiente.get('hardware',{})
+    par(f'Os experimentos foram realizados no Windows, com Python {ambiente["python"].split()[0]} e processador {hardware.get("Name",ambiente["processador"])}. O computador tem {hardware.get("NumberOfCores","-")} núcleos físicos e {hardware.get("NumberOfLogicalProcessors","-")} processadores lógicos. As CPUs do modelo são simuladas dentro de um único programa, sem execução paralela real.')
     par(f'Tempo real do motor: mínimo {min(r["duracao_motor_s"] for r in rs):.3f}s; máximo {max(r["duracao_motor_s"] for r in rs):.3f}s. Motor + saída: máximo {max(r["duracao_motor_s"]+r["duracao_saida_s"] for r in rs):.3f}s. A medição do motor inclui validação e cálculo de métricas, exclui leitura do arquivo, figuras e a repetição de verificação. Todas as configurações ficaram abaixo de um minuto nesta máquina.')
     par('Matriz: FCFS, SJF e RR com Q=2,5,10,20,50; dois cenários e duas quantidades de CPUs; LRU/256 quadros/troca 1. Mais quatro casos FCFS/FIFO. O PDF lista Q=2,10,50, mas menciona cinco quantums na contagem; Q=5 e 20 ampliam a cobertura por decisão de implementação.')
-    par('Taxa de faults = faults / 40.398 referências lógicas. Retentativas por falta de vítima não aumentam o numerador. Speedup = makespan 1 CPU / makespan 4 CPUs equivalentes; eficiência = speedup / 4. Percentuais por CPU incluem o intervalo desde t=0, inclusive antes da primeira chegada.')
+    par('A espera soma apenas o tempo na fila de prontos. O turnaround é o término menos a chegada, e a resposta é o primeiro despacho menos a chegada. O makespan é o instante do último término. A taxa de faults divide as faltas pelas 40.398 referências lógicas, sem contar retentativas como novas faltas. O speedup divide o makespan de 1 CPU pelo de 4 CPUs equivalentes; a eficiência é esse valor dividido por 4. A utilização de cada CPU é (tempo útil + troca) / makespan.')
     for cenario in cenarios:
-        quebra(); titulo('Resultados - '+cenario)
+        quebra(); titulo('4. Resultados - cenário '+('A' if cenario==cenarios[0] else 'B'))
         linhas=[r for r in rs if r['cenario']==cenario]
         par('Valores de tempo em unidades simuladas. Identificação: cenário-CPUs-política[-quantum]-memória. Todos os casos usam 256 quadros e custo de troca 1. Speedup e eficiência indicam o par 1/4 CPUs da mesma configuração, repetidos nas duas linhas.')
         headers=['Execução','Fim','Espera média','Espera máx.','Turn. médio','Resp. média','Trocas','Faults','Taxa %','Speedup','Efic. %']
         tabela(headers,[[nome(r)]+[f(r[k]) for k in ['makespan','espera_media','espera_maxima','turnaround_medio','resposta_media','trocas','faults']]+[f(100*r['taxa_faults']),f(r['speedup']),f(100*r['eficiencia'])] for r in linhas], [154]+[60]*10)
-    quebra(); titulo('Espera e efeito do quantum')
+    quebra(); titulo('5. Comparação dos escalonadores')
     figura(GRAF/'espera.png',720)
-    par('A escala logarítmica permite comparar os cenários; use os valores absolutos das tabelas para quantificar as diferenças. Os gráficos mostram apenas a base LRU.')
-    quebra(); titulo('Efeito do quantum no Round Robin')
+    par('O gráfico apresenta a espera média com LRU. O eixo vertical usa escala logarítmica porque os tempos de 1 e 4 CPUs são muito diferentes. Os valores exatos estão nas tabelas anteriores.')
+    quebra(); titulo('5.1. Quantum do Round Robin')
     figura(GRAF/'quantum.png',720)
-    quebra(); titulo('Speedup e evidências')
+    par('O quantum menor aumentou o número de trocas. No cenário B com 4 CPUs, Q=2 também reduziu o tempo de resposta, mas aumentou a espera e o tempo total. Portanto, atender mais cedo pela primeira vez não significou terminar mais rápido.')
+    quebra(); titulo('5.2. Ganho com quatro CPUs')
     figura(GRAF/'speedup.png',620)
     for cenario in cenarios:
         fc=selecionar(cenario,4)[0]; sj=selecionar(cenario,4)[1]
-        par(f'{nome(fc)} versus {nome(sj)}: espera média {fc["espera_media"]:.2f} versus {sj["espera_media"]:.2f}; makespan {fc["makespan"]} versus {sj["makespan"]}; faults {fc["faults"]} versus {sj["faults"]}. A mudança conjunta de fila e referências impede atribuir a diferença apenas à escolha do menor burst. O comportamento é compatível com a redução de atrasos causados por bursts longos no FCFS, sem isolar causalmente o efeito comboio.')
+        par(f'Em {nome(fc)}, a espera média foi {fc["espera_media"]:.2f}, o makespan foi {fc["makespan"]} e ocorreram {fc["faults"]} faults. Em {nome(sj)}, os valores foram {sj["espera_media"]:.2f}, {sj["makespan"]} e {sj["faults"]}. O SJF terminou a carga antes e teve menos faltas nos dois cenários. No A, porém, sua espera média foi maior. Isso mostra que diminuir o tempo total não garante diminuir a espera de todos os processos.')
         rr=[r for r in selecionar(cenario,4) if r['config']['sched']=='rr']
         a,b=rr[0],rr[-1]
-        par(f'{nome(a)} versus {nome(b)}: Q=2/50 produz resposta média {a["resposta_media"]:.2f}/{b["resposta_media"]:.2f}, espera média {a["espera_media"]:.2f}/{b["espera_media"]:.2f} e {a["trocas"]}/{b["trocas"]} trocas. Esses dados mostram o compromisso observado entre atendimento inicial e custo, que também é afetado pelos faults.')
+        par(f'Comparando {nome(a)} com {nome(b)}, a resposta média foi {a["resposta_media"]:.2f} e {b["resposta_media"]:.2f}; a espera média foi {a["espera_media"]:.2f} e {b["espera_media"]:.2f}; as trocas foram {a["trocas"]} e {b["trocas"]}. O quantum maior reduziu as trocas e a espera nesses casos.')
     par('O cenário B impõe chegadas até 10.604; CPUs extras não antecipam chegadas. Portanto, o speedup inclui limites de chegada, bloqueios e diferenças de memória, além da capacidade de CPU. Quatro é uma referência ideal, não uma garantia para este modelo integrado.')
     maior=max((r for r in rs if r['config']['cpus']==4),key=lambda r:r['speedup'])
     if maior['speedup']>4:
         equivalente=next(r for r in rs if r['cenario']==maior['cenario'] and r['config']==dict(maior['config'],cpus=1))
         par(f'{nome(maior)} apresenta speedup {maior["speedup"]:.2f} e eficiência {100*maior["eficiencia"]:.2f}%, acima da referência linear. As execuções de 1/4 CPUs têm {equivalente["faults"]}/{maior["faults"]} faults: a ordem de execução altera a pressão na memória. O ganho medido abrange essa interação e não representa paralelização de uma sequência fixa de instruções e faltas.')
-    quebra(); titulo('Leitura dos Gantts de 1 e 4 CPUs')
+    quebra(); titulo('6. Diagramas de Gantt')
     for exemplo in [selecionar(cenarios[0],1)[0],selecionar(cenarios[1],4)[0]]:
         por_tipo={tipo:sum(e['fim']-e['inicio'] for e in exemplo['gantt']
                       if (e['evento'].startswith('P') if tipo=='útil' else e['evento']==tipo))
@@ -139,7 +146,7 @@ def main():
         par(f'{nome(exemplo)}, janela [0,200): soma entre CPUs de {por_tipo["útil"]} unidades úteis, {por_tipo["TROCA"]} de troca e {por_tipo["OCIOSA"]} ociosas. São parcelas da janela, distintas dos totais da execução no apêndice.')
         figura(BASE/exemplo['id']/'gantt.png',600)
     par('No cenário A/FCFS, a fila inicial de 1.000 processos faz a janela inicial ser dominada por instalação de contextos e primeiras faltas: mesmo ocupada, a CPU ainda não produz trabalho útil. No cenário B com 4 CPUs, chegadas espaçadas permitem retornos atendidos mais cedo; aparecem intervalos úteis e ociosos. O Gantt evidencia por que utilização que inclui troca não equivale a produtividade.')
-    quebra(); titulo('Comparação de memória e justiça')
+    quebra(); titulo('7. FIFO e LRU')
     pares=[]
     for cenario in cenarios:
         for cpus in [1,4]:
@@ -147,10 +154,10 @@ def main():
             pares.append([nome(fi),str(fi['faults']),str(l['faults']),str(fi['makespan']),str(l['makespan']),f(fi['espera_media']),f(l['espera_media'])])
             par(f'{nome(fi)} comparado a {nome(l)}: diferença FIFO - LRU de {fi["faults"]-l["faults"]:+d} faults e {fi["makespan"]-l["makespan"]:+d} unidades de makespan. A comparação preserva cenário, escalonador, CPUs, quadros e custo.')
     tabela(['FIFO (par com LRU)','Faults FIFO','Faults LRU','Fim FIFO','Fim LRU','Espera FIFO','Espera LRU'],pares,[220]+[88]*6)
-    par('Faults frequentes, isoladamente, não provam thrashing: faltas compulsórias e localidade também pesam. São registrados substituições e retentativas, mas não uma série temporal de conjunto de trabalho. A análise não declara thrashing sem essa evidência adicional.')
-    par('Todos os processos terminaram nas cargas finitas. Isso exclui inanição observada nestas execuções, mas não prova ausência de starvation para chegadas ilimitadas no SJF. A tabela seguinte separa classes somente na análise; espera é o tempo acumulado na fila, não tempo total de bloqueio.')
+    par('O LRU teve menos faults e menor makespan nos quatro pares. Mesmo assim, não foi melhor em toda métrica: no cenário B com 4 CPUs, o FIFO teve menor espera média. Os resultados mostram que a substituição de páginas também altera a ordem e o tempo de retorno dos processos à fila.')
+    par('A quantidade de faults não basta para afirmar que houve thrashing. Parte das faltas ocorre porque as páginas ainda não foram carregadas. Seria necessário acompanhar o conjunto de trabalho ao longo do tempo para separar esse efeito das substituições frequentes.')
     for cenario in cenarios:
-        quebra(); titulo('Justiça por classe - '+cenario)
+        quebra(); titulo('8. Espera de processos curtos e longos - cenário '+('A' if cenario==cenarios[0] else 'B'))
         justica=[]
         for r in rs:
             if r['cenario']!=cenario: continue
@@ -160,11 +167,13 @@ def main():
         fc,sj=selecionar(cenario,4)[:2]
         def espera_classe(r,classe):
             return mean(p['espera'] for p in r['por_processo'] if p['classe']==classe)
-        par(f'Com 4 CPUs/LRU, {nome(fc)} e {nome(sj)} produzem espera média dos curtos de {espera_classe(fc,"curto"):.2f}/{espera_classe(sj,"curto"):.2f}, e dos longos de {espera_classe(fc,"longo"):.2f}/{espera_classe(sj,"longo"):.2f}. A separação mostra que a média global não descreve igualmente as duas classes. A espera acumulada não é normalizada pela demanda de CPU; processos longos têm mais oportunidades de retornar à fila, portanto valores maiores não demonstram, por si só, tratamento injusto por despacho.')
-    quebra(); titulo('Limitações e entrega')
+        par(f'Com 4 CPUs e LRU, a espera média dos curtos foi {espera_classe(fc,"curto"):.2f} no FCFS e {espera_classe(sj,"curto"):.2f} no SJF. Para os longos, foi {espera_classe(fc,"longo"):.2f} e {espera_classe(sj,"longo"):.2f}. Os longos esperaram mais, mas também voltam mais vezes à fila. Por isso, a espera acumulada sozinha não permite concluir que houve injustiça em cada despacho.')
+    quebra(); titulo('9. Conclusão e limitações')
+    par('As quatro CPUs reduziram o tempo total em todas as configurações. O SJF teve o menor makespan entre os escalonadores testados nos dois cenários, mas não apresentou a menor espera média em todos os casos. No RR, os quantums menores aumentaram o custo de troca. Na comparação de memória, o LRU reduziu as faltas e o tempo total em relação ao FIFO.')
+    par('Todos os processos terminaram, então não foi observada starvation nestas cargas. Isso não garante o mesmo resultado com chegadas contínuas de novos processos no SJF. Os dados também não isolam o efeito comboio: a escolha do escalonador muda tanto a fila quanto a sequência de referências à memória.')
     par('SJF conhece o burst futuro; um SO real o estimaria. Não há fila de disco, custo de migração, cache, TLB, bytes, endereços ou paralelismo físico. Latências de E/S e fault são independentes e constantes conforme o modelo. A ordem de operações simultâneas e a instalação de contexto são convenções determinísticas documentadas, relevantes à reprodução.')
-    par('Os critérios complementares do AVA não foram consultados: não há acesso autenticado disponibilizado. O prazo do PDF é 03/11/2026 às 19h. Repositório de destino informado pela equipe: https://github.com/MatheusThurow/SO_m2. O estado da publicação está registrado em STATUS.md. O envio ao AVA continua pendente; publicação no GitHub não constitui submissão ao AVA.')
-    par('Defesa: demonstrar a CLI com --cpus 1/4, --sched fcfs/sjf/rr, --quantum 2/50, --quadros 1/256 e --subst fifo/lru; usar o exemplo pequeno com --log; explicar a proteção no retorno, consumo de referências, fila global, resposta antes da troca e identidades de conservação de tempo. Consulte DEFESA.md para o roteiro completo.')
+    titulo('Referências')
+    par('Enunciado do Trabalho M2 de Sistemas Operacionais (2026) e arquivos cenario_A_t0.json e cenario_B_espacadas.json, fornecidos para a atividade. Código, instruções e resultados: https://github.com/MatheusThurow/SO_m2.')
     titulo('Apêndice - Gantts e tempos por CPU')
     par('Cada página seguinte identifica uma configuração e mostra a janela 0 a 200. Pn identifica o processo; TROCA e OCIOSA usam a legenda. Os CSVs preservam exatamente cada intervalo e permitem ampliar qualquer trecho. A tabela abaixo de cada figura cobre toda a execução, e não apenas a janela do gráfico.')
     for r in rs:
@@ -175,9 +184,9 @@ def main():
             [[c['cpu'],c['util'],f(c['util_pct']),c['troca'],f(c['troca_pct']),c['ocioso'],f(c['ocioso_pct']),c['trocas'],f(c['utilizacao']*100)] for c in r['por_cpu']], [50]+[88]*8)
         par(f'Makespan {r["makespan"]}; espera média {r["espera_media"]:.2f}; resposta média {r["resposta_media"]:.2f}; faults {r["faults"]}; taxa {100*r["taxa_faults"]:.2f}%.')
     def rodape(canvas,doc):
-        canvas.setFont('Helvetica',8)
-        canvas.setFillColor(colors.HexColor('#526579'))
-        canvas.drawString(36,20,'SO M2 | Thurow, Nicola e Bez | Resultados de simulação')
+        canvas.setFont('Times-Roman',9)
+        canvas.setFillColor(colors.black)
+        canvas.drawString(36,20,'Sistemas Operacionais - Trabalho M2')
         canvas.drawRightString(806,20,str(doc.page))
     doc=SimpleDocTemplate(str(OUT/'relatorio_m2.pdf'),pagesize=landscape(A4),rightMargin=36,leftMargin=36,topMargin=30,bottomMargin=36,
                           title='Trabalho M2 - Sistemas Operacionais',author='Matheus Thurow; Rodrigo Nicola; Eduardo Bez')

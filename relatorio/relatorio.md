@@ -1,14 +1,19 @@
 
 ## Simulador de escalonamento multiprocessado com paginação sob demanda
 
-Sistemas Operacionais - Trabalho M2 | 03/11/2026
+Sistemas Operacionais - Trabalho M2 - 03/11/2026
 
-Equipe: Matheus Thurow, Rodrigo Nicola e Eduardo Bez.
-
-Implementação em Python; 32 configurações executadas e repetidas integralmente, com resultados idênticos. Cada execução concluiu os 1.000 processos e consumiu exatamente 40.398 unidades úteis de CPU.
+Matheus Thurow, Rodrigo Nicola e Eduardo Bez
 
 
-## Modelo e estruturas de dados
+## 1. Introdução
+
+Este trabalho apresenta um simulador em Python que reúne escalonamento de CPU e paginação sob demanda. Foram comparados FCFS, SJF e Round Robin em máquinas simuladas com 1 e 4 CPUs, usando as políticas de memória FIFO e LRU. O objetivo foi observar como essas escolhas afetam os tempos dos processos, as faltas de página e o uso das CPUs.
+
+Foram usados dois cenários com os mesmos 1.000 processos: no A, todos chegam no instante zero; no B, as chegadas são distribuídas até o instante 10.604. São 952 processos curtos e 48 longos. Cada cenário exige 40.398 unidades de CPU, intercaladas com etapas de E/S.
+
+
+## 2. Funcionamento do simulador
 
 O motor avança em unidades inteiras, com CPUs simuladas e uma fila global. FCFS/RR usam deque (inserção e retirada O(1)); SJF usa heap pelo burst restante e sequência de entrada (O(log P)). Eventos usam heap por instante e pid. Cada processo mantém o índice de burst e referência, estado e acumuladores de tempo. Nenhuma política consulta o rótulo de classe.
 
@@ -21,24 +26,24 @@ A página só é carregada no retorno do fault, após 20 unidades. Retornos no m
 O contexto da CPU é identificado pelo último contexto instalado no despacho, inclusive quando o acesso seguinte produz fault. O primeiro despacho cobra troca; um retorno ao mesmo contexto sem outro despacho não cobra. Com custo zero, nenhuma ocorrência é contada como custo cobrado. Resposta e espera encerram-se no despacho, antes da troca.
 
 
-## Validação e reprodução
+## 3. Testes e experimentos
 
 Os testes automatizados reproduzem o exemplo 7.1 (makespan 13, útil 10, troca 3, espera 4,67 e turnaround 9), o 7.2 (fault de teste = 5, makespan 13, cinco faults, esperas zero) e o 7.3 (esperas médias 3,67 FCFS e 2,33 SJF). O exemplo 5.5 termina em 441, com quatro faults. A latência da CLI de produção permanece fixa em 20.
 
 Também são testados RR sem concorrentes, chegada no quantum, SJF não preemptivo e empate, FIFO/LRU, quadros protegidos, retentativa sem fault extra e quatro CPUs simultâneas. Asserções em toda execução verificam: útil + troca + ocioso = makespan por CPU; turnaround = espera + útil + troca + bloqueio por processo; todas as referências consumidas e memória liberada ao terminar.
 
-Comandos: python -m unittest discover -s tests -v; python experimentos.py; python gerar_relatorio.py. Cada diretório em resultados contém resultado.json, processos.csv, cpus.csv, gantt.csv e gantt.png. O consolidado.csv resume a matriz; ambiente.json contém hashes SHA-256, interpretador e comandos exatos. Tempos reais não são tempos simulados.
+As 32 configurações foram executadas duas vezes. As repetições produziram os mesmos resultados por processo, por CPU e no Gantt. Em todos os casos, os 1.000 processos terminaram e foram consumidas as 40.398 referências previstas. Os comandos para repetir os testes e os experimentos estão no README do repositório.
 
-Ambiente medido: Windows-11-10.0.26200-SP0; Python 3.14.7; Intel64 Family 6 Model 151 Stepping 2, GenuineIntel. Hardware registrado: {'Name': '12th Gen Intel(R) Core(TM) i5-12450HX', 'NumberOfCores': 8, 'NumberOfLogicalProcessors': 12}. As CPUs 1/4 são simuladas sequencialmente, sem paralelismo real.
+Os experimentos foram realizados no Windows, com Python 3.14.7 e processador 12th Gen Intel(R) Core(TM) i5-12450HX. O computador tem 8 núcleos físicos e 12 processadores lógicos. As CPUs do modelo são simuladas dentro de um único programa, sem execução paralela real.
 
 Tempo real do motor: mínimo 0.150s; máximo 8.893s. Motor + saída: máximo 10.841s. A medição do motor inclui validação e cálculo de métricas, exclui leitura do arquivo, figuras e a repetição de verificação. Todas as configurações ficaram abaixo de um minuto nesta máquina.
 
 Matriz: FCFS, SJF e RR com Q=2,5,10,20,50; dois cenários e duas quantidades de CPUs; LRU/256 quadros/troca 1. Mais quatro casos FCFS/FIFO. O PDF lista Q=2,10,50, mas menciona cinco quantums na contagem; Q=5 e 20 ampliam a cobertura por decisão de implementação.
 
-Taxa de faults = faults / 40.398 referências lógicas. Retentativas por falta de vítima não aumentam o numerador. Speedup = makespan 1 CPU / makespan 4 CPUs equivalentes; eficiência = speedup / 4. Percentuais por CPU incluem o intervalo desde t=0, inclusive antes da primeira chegada.
+A espera soma apenas o tempo na fila de prontos. O turnaround é o término menos a chegada, e a resposta é o primeiro despacho menos a chegada. O makespan é o instante do último término. A taxa de faults divide as faltas pelas 40.398 referências lógicas, sem contar retentativas como novas faltas. O speedup divide o makespan de 1 CPU pelo de 4 CPUs equivalentes; a eficiência é esse valor dividido por 4. A utilização de cada CPU é (tempo útil + troca) / makespan.
 
 
-## Resultados - cenario_A_t0
+## 4. Resultados - cenário A
 
 Valores de tempo em unidades simuladas. Identificação: cenário-CPUs-política[-quantum]-memória. Todos os casos usam 256 quadros e custo de troca 1. Speedup e eficiência indicam o par 1/4 CPUs da mesma configuração, repetidos nas duas linhas.
 
@@ -62,7 +67,7 @@ Valores de tempo em unidades simuladas. Identificação: cenário-CPUs-política
 | A-4CPU-SJF-LRU | 13359 | 3466.59 | 12239 | 3713.98 | 1771.17 | 11029 | 8064 | 19.96 | 3.81 | 95.31 |
 
 
-## Resultados - cenario_B_espacadas
+## 4. Resultados - cenário B
 
 Valores de tempo em unidades simuladas. Identificação: cenário-CPUs-política[-quantum]-memória. Todos os casos usam 256 quadros e custo de troca 1. Speedup e eficiência indicam o par 1/4 CPUs da mesma configuração, repetidos nas duas linhas.
 
@@ -86,36 +91,38 @@ Valores de tempo em unidades simuladas. Identificação: cenário-CPUs-política
 | B-4CPU-SJF-LRU | 12843 | 165.36 | 8786 | 365.04 | 19.36 | 8755 | 5792 | 14.34 | 3.93 | 98.18 |
 
 
-## Espera e efeito do quantum
+## 5. Comparação dos escalonadores
 
 ![espera](graficos/espera.png)
 
-A escala logarítmica permite comparar os cenários; use os valores absolutos das tabelas para quantificar as diferenças. Os gráficos mostram apenas a base LRU.
+O gráfico apresenta a espera média com LRU. O eixo vertical usa escala logarítmica porque os tempos de 1 e 4 CPUs são muito diferentes. Os valores exatos estão nas tabelas anteriores.
 
 
-## Efeito do quantum no Round Robin
+## 5.1. Quantum do Round Robin
 
 ![quantum](graficos/quantum.png)
 
+O quantum menor aumentou o número de trocas. No cenário B com 4 CPUs, Q=2 também reduziu o tempo de resposta, mas aumentou a espera e o tempo total. Portanto, atender mais cedo pela primeira vez não significou terminar mais rápido.
 
-## Speedup e evidências
+
+## 5.2. Ganho com quatro CPUs
 
 ![speedup](graficos/speedup.png)
 
-A-4CPU-FCFS-LRU versus A-4CPU-SJF-LRU: espera média 2752.89 versus 3466.59; makespan 16303 versus 13359; faults 20861 versus 8064. A mudança conjunta de fila e referências impede atribuir a diferença apenas à escolha do menor burst. O comportamento é compatível com a redução de atrasos causados por bursts longos no FCFS, sem isolar causalmente o efeito comboio.
+Em A-4CPU-FCFS-LRU, a espera média foi 2752.89, o makespan foi 16303 e ocorreram 20861 faults. Em A-4CPU-SJF-LRU, os valores foram 3466.59, 13359 e 8064. O SJF terminou a carga antes e teve menos faltas nos dois cenários. No A, porém, sua espera média foi maior. Isso mostra que diminuir o tempo total não garante diminuir a espera de todos os processos.
 
-A-4CPU-RR-Q2-LRU versus A-4CPU-RR-Q50-LRU: Q=2/50 produz resposta média 124.50/124.50, espera média 2904.74/2752.66 e 34166/23808 trocas. Esses dados mostram o compromisso observado entre atendimento inicial e custo, que também é afetado pelos faults.
+Comparando A-4CPU-RR-Q2-LRU com A-4CPU-RR-Q50-LRU, a resposta média foi 124.50 e 124.50; a espera média foi 2904.74 e 2752.66; as trocas foram 34166 e 23808. O quantum maior reduziu as trocas e a espera nesses casos.
 
-B-4CPU-FCFS-LRU versus B-4CPU-SJF-LRU: espera média 527.24 versus 165.36; makespan 13421 versus 12843; faults 9263 versus 5792. A mudança conjunta de fila e referências impede atribuir a diferença apenas à escolha do menor burst. O comportamento é compatível com a redução de atrasos causados por bursts longos no FCFS, sem isolar causalmente o efeito comboio.
+Em B-4CPU-FCFS-LRU, a espera média foi 527.24, o makespan foi 13421 e ocorreram 9263 faults. Em B-4CPU-SJF-LRU, os valores foram 165.36, 12843 e 5792. O SJF terminou a carga antes e teve menos faltas nos dois cenários. No A, porém, sua espera média foi maior. Isso mostra que diminuir o tempo total não garante diminuir a espera de todos os processos.
 
-B-4CPU-RR-Q2-LRU versus B-4CPU-RR-Q50-LRU: Q=2/50 produz resposta média 31.34/40.04, espera média 855.18/523.81 e 29557/12443 trocas. Esses dados mostram o compromisso observado entre atendimento inicial e custo, que também é afetado pelos faults.
+Comparando B-4CPU-RR-Q2-LRU com B-4CPU-RR-Q50-LRU, a resposta média foi 31.34 e 40.04; a espera média foi 855.18 e 523.81; as trocas foram 29557 e 12443. O quantum maior reduziu as trocas e a espera nesses casos.
 
 O cenário B impõe chegadas até 10.604; CPUs extras não antecipam chegadas. Portanto, o speedup inclui limites de chegada, bloqueios e diferenças de memória, além da capacidade de CPU. Quatro é uma referência ideal, não uma garantia para este modelo integrado.
 
 B-4CPU-FCFS-FIFO apresenta speedup 4.79 e eficiência 119.75%, acima da referência linear. As execuções de 1/4 CPUs têm 21425/9371 faults: a ordem de execução altera a pressão na memória. O ganho medido abrange essa interação e não representa paralelização de uma sequência fixa de instruções e faltas.
 
 
-## Leitura dos Gantts de 1 e 4 CPUs
+## 6. Diagramas de Gantt
 
 A-1CPU-FCFS-LRU, janela [0,200): soma entre CPUs de 0 unidades úteis, 200 de troca e 0 ociosas. São parcelas da janela, distintas dos totais da execução no apêndice.
 
@@ -128,7 +135,7 @@ B-4CPU-FCFS-LRU, janela [0,200): soma entre CPUs de 434 unidades úteis, 287 de 
 No cenário A/FCFS, a fila inicial de 1.000 processos faz a janela inicial ser dominada por instalação de contextos e primeiras faltas: mesmo ocupada, a CPU ainda não produz trabalho útil. No cenário B com 4 CPUs, chegadas espaçadas permitem retornos atendidos mais cedo; aparecem intervalos úteis e ociosos. O Gantt evidencia por que utilização que inclui troca não equivale a produtividade.
 
 
-## Comparação de memória e justiça
+## 7. FIFO e LRU
 
 A-1CPU-FCFS-FIFO comparado a A-1CPU-FCFS-LRU: diferença FIFO - LRU de +922 faults e +948 unidades de makespan. A comparação preserva cenário, escalonador, CPUs, quadros e custo.
 
@@ -145,12 +152,12 @@ B-4CPU-FCFS-FIFO comparado a B-4CPU-FCFS-LRU: diferença FIFO - LRU de +108 faul
 | B-1CPU-FCFS-FIFO | 21425 | 20570 | 64863 | 63989 | 11009.08 | 10991.44 |
 | B-4CPU-FCFS-FIFO | 9371 | 9263 | 13541 | 13421 | 466.44 | 527.24 |
 
-Faults frequentes, isoladamente, não provam thrashing: faltas compulsórias e localidade também pesam. São registrados substituições e retentativas, mas não uma série temporal de conjunto de trabalho. A análise não declara thrashing sem essa evidência adicional.
+O LRU teve menos faults e menor makespan nos quatro pares. Mesmo assim, não foi melhor em toda métrica: no cenário B com 4 CPUs, o FIFO teve menor espera média. Os resultados mostram que a substituição de páginas também altera a ordem e o tempo de retorno dos processos à fila.
 
-Todos os processos terminaram nas cargas finitas. Isso exclui inanição observada nestas execuções, mas não prova ausência de starvation para chegadas ilimitadas no SJF. A tabela seguinte separa classes somente na análise; espera é o tempo acumulado na fila, não tempo total de bloqueio.
+A quantidade de faults não basta para afirmar que houve thrashing. Parte das faltas ocorre porque as páginas ainda não foram carregadas. Seria necessário acompanhar o conjunto de trabalho ao longo do tempo para separar esse efeito das substituições frequentes.
 
 
-## Justiça por classe - cenario_A_t0
+## 8. Espera de processos curtos e longos - cenário A
 
 | Execução | Média curtos (952) | Máx. curtos | Média longos (48) | Máx. longos |
 | --- | --- | --- | --- | --- |
@@ -171,10 +178,10 @@ Todos os processos terminaram nas cargas finitas. Isso exclui inanição observa
 | A-4CPU-RR-Q5-LRU | 2425.38 | 5405 | 9872.85 | 12620 |
 | A-4CPU-SJF-LRU | 3187.04 | 5991 | 9010.96 | 12239 |
 
-Com 4 CPUs/LRU, A-4CPU-FCFS-LRU e A-4CPU-SJF-LRU produzem espera média dos curtos de 2426.62/3187.04, e dos longos de 9223.75/9010.96. A separação mostra que a média global não descreve igualmente as duas classes. A espera acumulada não é normalizada pela demanda de CPU; processos longos têm mais oportunidades de retornar à fila, portanto valores maiores não demonstram, por si só, tratamento injusto por despacho.
+Com 4 CPUs e LRU, a espera média dos curtos foi 2426.62 no FCFS e 3187.04 no SJF. Para os longos, foi 9223.75 e 9010.96. Os longos esperaram mais, mas também voltam mais vezes à fila. Por isso, a espera acumulada sozinha não permite concluir que houve injustiça em cada despacho.
 
 
-## Justiça por classe - cenario_B_espacadas
+## 8. Espera de processos curtos e longos - cenário B
 
 | Execução | Média curtos (952) | Máx. curtos | Média longos (48) | Máx. longos |
 | --- | --- | --- | --- | --- |
@@ -195,16 +202,21 @@ Com 4 CPUs/LRU, A-4CPU-FCFS-LRU e A-4CPU-SJF-LRU produzem espera média dos curt
 | B-4CPU-RR-Q5-LRU | 323.83 | 972 | 4677.88 | 7790 |
 | B-4CPU-SJF-LRU | 36.80 | 318 | 2715.12 | 8786 |
 
-Com 4 CPUs/LRU, B-4CPU-FCFS-LRU e B-4CPU-SJF-LRU produzem espera média dos curtos de 393.76/36.80, e dos longos de 3174.75/2715.12. A separação mostra que a média global não descreve igualmente as duas classes. A espera acumulada não é normalizada pela demanda de CPU; processos longos têm mais oportunidades de retornar à fila, portanto valores maiores não demonstram, por si só, tratamento injusto por despacho.
+Com 4 CPUs e LRU, a espera média dos curtos foi 393.76 no FCFS e 36.80 no SJF. Para os longos, foi 3174.75 e 2715.12. Os longos esperaram mais, mas também voltam mais vezes à fila. Por isso, a espera acumulada sozinha não permite concluir que houve injustiça em cada despacho.
 
 
-## Limitações e entrega
+## 9. Conclusão e limitações
+
+As quatro CPUs reduziram o tempo total em todas as configurações. O SJF teve o menor makespan entre os escalonadores testados nos dois cenários, mas não apresentou a menor espera média em todos os casos. No RR, os quantums menores aumentaram o custo de troca. Na comparação de memória, o LRU reduziu as faltas e o tempo total em relação ao FIFO.
+
+Todos os processos terminaram, então não foi observada starvation nestas cargas. Isso não garante o mesmo resultado com chegadas contínuas de novos processos no SJF. Os dados também não isolam o efeito comboio: a escolha do escalonador muda tanto a fila quanto a sequência de referências à memória.
 
 SJF conhece o burst futuro; um SO real o estimaria. Não há fila de disco, custo de migração, cache, TLB, bytes, endereços ou paralelismo físico. Latências de E/S e fault são independentes e constantes conforme o modelo. A ordem de operações simultâneas e a instalação de contexto são convenções determinísticas documentadas, relevantes à reprodução.
 
-Os critérios complementares do AVA não foram consultados: não há acesso autenticado disponibilizado. O prazo do PDF é 03/11/2026 às 19h. Repositório de destino informado pela equipe: https://github.com/MatheusThurow/SO_m2. O estado da publicação está registrado em STATUS.md. O envio ao AVA continua pendente; publicação no GitHub não constitui submissão ao AVA.
 
-Defesa: demonstrar a CLI com --cpus 1/4, --sched fcfs/sjf/rr, --quantum 2/50, --quadros 1/256 e --subst fifo/lru; usar o exemplo pequeno com --log; explicar a proteção no retorno, consumo de referências, fila global, resposta antes da troca e identidades de conservação de tempo. Consulte DEFESA.md para o roteiro completo.
+## Referências
+
+Enunciado do Trabalho M2 de Sistemas Operacionais (2026) e arquivos cenario_A_t0.json e cenario_B_espacadas.json, fornecidos para a atividade. Código, instruções e resultados: https://github.com/MatheusThurow/SO_m2.
 
 
 ## Apêndice - Gantts e tempos por CPU
