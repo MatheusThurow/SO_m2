@@ -1,0 +1,107 @@
+{
+  "config": {
+    "cpus": 1,
+    "sched": "fcfs",
+    "quantum": 10,
+    "subst": "lru",
+    "quadros": 256,
+    "custo_troca": 0,
+    "memoria": true,
+    "latencia_fault": 20
+  },
+  "processos": 3,
+  "makespan": 29,
+  "espera_media": 3.6666666666666665,
+  "espera_maxima": 7,
+  "turnaround_medio": 26.666666666666668,
+  "resposta_media": 0,
+  "trocas": 0,
+  "faults": 3,
+  "taxa_faults": 0.3333333333333333,
+  "referencias_logicas": 9,
+  "pico_quadros": 3,
+  "substituicoes": 0,
+  "retentativas": 0,
+  "por_cpu": [
+    {
+      "cpu": 0,
+      "util": 9,
+      "troca": 0,
+      "ocioso": 20,
+      "trocas": 0,
+      "util_pct": 31.03448275862069,
+      "troca_pct": 0.0,
+      "ocioso_pct": 68.96551724137932,
+      "utilizacao": 0.3103448275862069
+    }
+  ],
+  "por_processo": [
+    {
+      "pid": 1,
+      "classe": "curto",
+      "chegada": 0,
+      "termino": 24,
+      "espera": 0,
+      "resposta": 0,
+      "turnaround": 24,
+      "faults": 1,
+      "util": 4,
+      "troca": 0,
+      "bloqueado": 20
+    },
+    {
+      "pid": 2,
+      "classe": "curto",
+      "chegada": 0,
+      "termino": 27,
+      "espera": 4,
+      "resposta": 0,
+      "turnaround": 27,
+      "faults": 1,
+      "util": 3,
+      "troca": 0,
+      "bloqueado": 20
+    },
+    {
+      "pid": 3,
+      "classe": "curto",
+      "chegada": 0,
+      "termino": 29,
+      "espera": 7,
+      "resposta": 0,
+      "turnaround": 29,
+      "faults": 1,
+      "util": 2,
+      "troca": 0,
+      "bloqueado": 20
+    }
+  ],
+  "gantt": [
+    {
+      "cpu": 0,
+      "inicio": 0,
+      "fim": 20,
+      "evento": "OCIOSA"
+    },
+    {
+      "cpu": 0,
+      "inicio": 20,
+      "fim": 24,
+      "evento": "P1"
+    },
+    {
+      "cpu": 0,
+      "inicio": 24,
+      "fim": 27,
+      "evento": "P2"
+    },
+    {
+      "cpu": 0,
+      "inicio": 27,
+      "fim": 29,
+      "evento": "P3"
+    }
+  ],
+  "id": "exemplo_73_cpu1_fcfs_q0_lru_f256_c0",
+  "duracao_motor_s": 0.0010806999634951353
+}

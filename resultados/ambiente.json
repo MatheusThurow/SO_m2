@@ -1,0 +1,59 @@
+{
+  "python": "3.14.7 (tags/v3.14.7:823f032, Aug  5 2026, 10:51:32) [MSC v.1944 64 bit (AMD64)]",
+  "sistema": "Windows-11-10.0.26200-SP0",
+  "processador": "Intel64 Family 6 Model 151 Stepping 2, GenuineIntel",
+  "data_local": "2026-11-03T20:42:20.409605-03:00",
+  "entradas": {
+    "cenario_A_t0.json": {
+      "sha256": "c72a48e6b1c9a8f5c5ccd3b5089483a45ab229cba7bdb0ba2aa2029fff15b4d8",
+      "processos": 1000,
+      "cpu_total": 40398
+    },
+    "cenario_B_espacadas.json": {
+      "sha256": "93a1afc25001aa2e6feb5201c7dc30e0d105874b9395f192de746629d5aafedd",
+      "processos": 1000,
+      "cpu_total": 40398
+    }
+  },
+  "comandos": [
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 1 --sched fcfs --quantum 10 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 4 --sched fcfs --quantum 10 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 1 --sched sjf --quantum 10 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 4 --sched sjf --quantum 10 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 1 --sched rr --quantum 2 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 4 --sched rr --quantum 2 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 1 --sched rr --quantum 5 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 4 --sched rr --quantum 5 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 1 --sched rr --quantum 10 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 4 --sched rr --quantum 10 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 1 --sched rr --quantum 20 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 4 --sched rr --quantum 20 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 1 --sched rr --quantum 50 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 4 --sched rr --quantum 50 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 1 --sched fcfs --quantum 10 --subst fifo --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_A_t0.json --cpus 4 --sched fcfs --quantum 10 --subst fifo --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 1 --sched fcfs --quantum 10 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 4 --sched fcfs --quantum 10 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 1 --sched sjf --quantum 10 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 4 --sched sjf --quantum 10 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 1 --sched rr --quantum 2 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 4 --sched rr --quantum 2 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 1 --sched rr --quantum 5 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 4 --sched rr --quantum 5 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 1 --sched rr --quantum 10 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 4 --sched rr --quantum 10 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 1 --sched rr --quantum 20 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 4 --sched rr --quantum 20 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 1 --sched rr --quantum 50 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 4 --sched rr --quantum 50 --subst lru --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 1 --sched fcfs --quantum 10 --subst fifo --quadros 256 --custo-troca 1",
+    "python -m simulador --arquivo cenarios/cenario_B_espacadas.json --cpus 4 --sched fcfs --quantum 10 --subst fifo --quadros 256 --custo-troca 1"
+  ],
+  "cpus_logicas_host": 12,
+  "hardware": {
+    "Name": "12th Gen Intel(R) Core(TM) i5-12450HX",
+    "NumberOfCores": 8,
+    "NumberOfLogicalProcessors": 12
+  },
+  "memoria_host_bytes": 16890322944
+}

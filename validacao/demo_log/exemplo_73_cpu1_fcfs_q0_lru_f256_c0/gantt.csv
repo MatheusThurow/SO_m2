@@ -1,0 +1,5 @@
+cpu,inicio,fim,evento
+0,0,20,OCIOSA
+0,20,24,P1
+0,24,27,P2
+0,27,29,P3

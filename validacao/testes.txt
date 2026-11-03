@@ -1,0 +1,17 @@
+test_55 (test_simulador.ExemplosProfessor.test_55) ... ok
+test_71 (test_simulador.ExemplosProfessor.test_71) ... ok
+test_72 (test_simulador.ExemplosProfessor.test_72) ... ok
+test_73 (test_simulador.ExemplosProfessor.test_73) ... ok
+test_conservacao_combinacoes (test_simulador.Regras.test_conservacao_combinacoes) ... ok
+test_entrada_invalida (test_simulador.Regras.test_entrada_invalida) ... ok
+test_fifo_lru (test_simulador.Regras.test_fifo_lru) ... ok
+test_protecao_retentativa_e_log (test_simulador.Regras.test_protecao_retentativa_e_log) ... ok
+test_quatro_cpus_e_repetibilidade (test_simulador.Regras.test_quatro_cpus_e_repetibilidade) ... ok
+test_rr_chegada_antes_preempcao (test_simulador.Regras.test_rr_chegada_antes_preempcao) ... ok
+test_rr_sem_concorrentes_e_retorno (test_simulador.Regras.test_rr_sem_concorrentes_e_retorno) ... ok
+test_sjf_nao_preemptivo_e_empate (test_simulador.Regras.test_sjf_nao_preemptivo_e_empate) ... ok
+
+----------------------------------------------------------------------
+Ran 12 tests in 0.009s
+
+OK

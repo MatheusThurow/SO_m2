@@ -1,0 +1,21 @@
+{"tempo": 0, "evento": "chegada", "pid": 1, "estado": "Pronto", "prontos": [1], "bloqueados": [], "cpus": [{"cpu": 0, "pid": null, "troca_restante": 0}], "quadros_ocupados": 0}
+{"tempo": 0, "evento": "chegada", "pid": 2, "estado": "Pronto", "prontos": [1, 2], "bloqueados": [], "cpus": [{"cpu": 0, "pid": null, "troca_restante": 0}], "quadros_ocupados": 0}
+{"tempo": 0, "evento": "chegada", "pid": 3, "estado": "Pronto", "prontos": [1, 2, 3], "bloqueados": [], "cpus": [{"cpu": 0, "pid": null, "troca_restante": 0}], "quadros_ocupados": 0}
+{"tempo": 0, "evento": "despacho", "pid": 1, "estado": "Executando", "prontos": [2, 3], "bloqueados": [], "cpus": [{"cpu": 0, "pid": 1, "troca_restante": 0}], "quadros_ocupados": 0}
+{"tempo": 0, "evento": "fault", "pid": 1, "estado": "Bloqueado", "prontos": [2, 3], "bloqueados": [{"pid": 1, "retorno": 20, "motivo": "fault"}], "cpus": [{"cpu": 0, "pid": null, "troca_restante": 0}], "quadros_ocupados": 0}
+{"tempo": 0, "evento": "despacho", "pid": 2, "estado": "Executando", "prontos": [3], "bloqueados": [{"pid": 1, "retorno": 20, "motivo": "fault"}], "cpus": [{"cpu": 0, "pid": 2, "troca_restante": 0}], "quadros_ocupados": 0}
+{"tempo": 0, "evento": "fault", "pid": 2, "estado": "Bloqueado", "prontos": [3], "bloqueados": [{"pid": 1, "retorno": 20, "motivo": "fault"}, {"pid": 2, "retorno": 20, "motivo": "fault"}], "cpus": [{"cpu": 0, "pid": null, "troca_restante": 0}], "quadros_ocupados": 0}
+{"tempo": 0, "evento": "despacho", "pid": 3, "estado": "Executando", "prontos": [], "bloqueados": [{"pid": 1, "retorno": 20, "motivo": "fault"}, {"pid": 2, "retorno": 20, "motivo": "fault"}], "cpus": [{"cpu": 0, "pid": 3, "troca_restante": 0}], "quadros_ocupados": 0}
+{"tempo": 0, "evento": "fault", "pid": 3, "estado": "Bloqueado", "prontos": [], "bloqueados": [{"pid": 1, "retorno": 20, "motivo": "fault"}, {"pid": 2, "retorno": 20, "motivo": "fault"}, {"pid": 3, "retorno": 20, "motivo": "fault"}], "cpus": [{"cpu": 0, "pid": null, "troca_restante": 0}], "quadros_ocupados": 0}
+{"tempo": 20, "evento": "retorno_fault", "pid": 1, "estado": "Pronto", "prontos": [1], "bloqueados": [{"pid": 2, "retorno": 20, "motivo": "fault"}, {"pid": 3, "retorno": 20, "motivo": "fault"}], "cpus": [{"cpu": 0, "pid": null, "troca_restante": 0}], "quadros_ocupados": 1}
+{"tempo": 20, "evento": "retorno_fault", "pid": 2, "estado": "Pronto", "prontos": [1, 2], "bloqueados": [{"pid": 3, "retorno": 20, "motivo": "fault"}], "cpus": [{"cpu": 0, "pid": null, "troca_restante": 0}], "quadros_ocupados": 2}
+{"tempo": 20, "evento": "retorno_fault", "pid": 3, "estado": "Pronto", "prontos": [1, 2, 3], "bloqueados": [], "cpus": [{"cpu": 0, "pid": null, "troca_restante": 0}], "quadros_ocupados": 3}
+{"tempo": 20, "evento": "despacho", "pid": 1, "estado": "Executando", "prontos": [2, 3], "bloqueados": [], "cpus": [{"cpu": 0, "pid": 1, "troca_restante": 0}], "quadros_ocupados": 3}
+{"tempo": 24, "evento": "fim_burst", "pid": 1, "estado": "Executando", "prontos": [2, 3], "bloqueados": [], "cpus": [{"cpu": 0, "pid": null, "troca_restante": 0}], "quadros_ocupados": 3}
+{"tempo": 24, "evento": "termino", "pid": 1, "estado": "Terminado", "prontos": [2, 3], "bloqueados": [], "cpus": [{"cpu": 0, "pid": null, "troca_restante": 0}], "quadros_ocupados": 2}
+{"tempo": 24, "evento": "despacho", "pid": 2, "estado": "Executando", "prontos": [3], "bloqueados": [], "cpus": [{"cpu": 0, "pid": 2, "troca_restante": 0}], "quadros_ocupados": 2}
+{"tempo": 27, "evento": "fim_burst", "pid": 2, "estado": "Executando", "prontos": [3], "bloqueados": [], "cpus": [{"cpu": 0, "pid": null, "troca_restante": 0}], "quadros_ocupados": 2}
+{"tempo": 27, "evento": "termino", "pid": 2, "estado": "Terminado", "prontos": [3], "bloqueados": [], "cpus": [{"cpu": 0, "pid": null, "troca_restante": 0}], "quadros_ocupados": 1}
+{"tempo": 27, "evento": "despacho", "pid": 3, "estado": "Executando", "prontos": [], "bloqueados": [], "cpus": [{"cpu": 0, "pid": 3, "troca_restante": 0}], "quadros_ocupados": 1}
+{"tempo": 29, "evento": "fim_burst", "pid": 3, "estado": "Executando", "prontos": [], "bloqueados": [], "cpus": [{"cpu": 0, "pid": null, "troca_restante": 0}], "quadros_ocupados": 1}
+{"tempo": 29, "evento": "termino", "pid": 3, "estado": "Terminado", "prontos": [], "bloqueados": [], "cpus": [{"cpu": 0, "pid": null, "troca_restante": 0}], "quadros_ocupados": 0}

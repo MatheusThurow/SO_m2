@@ -1,0 +1,7 @@
+{
+  "execucoes": 32,
+  "repeticoes_identicas": 32,
+  "processos_por_execucao": 1000,
+  "referencias_por_execucao": 40398,
+  "invariantes": "OK"
+}
