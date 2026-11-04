@@ -17,8 +17,7 @@
 
 ## Publicação
 
-Publicado em https://github.com/MatheusThurow/SO_m2, na branch `codex/trabalho-m2`,
-que se tornou a branch padrão do repositório inicialmente vazio.
+Publicado em https://github.com/MatheusThurow/SO_m2.
 O envio foi confirmado por `git ls-remote`, e a página pública foi aberta sem autenticação.
 Os bytes dos cenários e do PDF foram comparados com os blobs do commit publicado.
 O histórico Git identifica os commits; `validacao/pacote.json` registra execução a partir do ZIP extraído.

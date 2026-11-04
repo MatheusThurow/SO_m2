@@ -14,9 +14,9 @@ Este documento organiza o desenvolvimento em 12 tasks com dependências, entrega
 
 ## 2. Materiais de referência
 
-- [Enunciado — TRABALHO M2 SO 2026_.pdf](https://chatgpt.com/library?file_id=libfile_5be8ae582d50819186c3a38670cdf9d2&account_id=personal)
-- [Cenário A — cenario_A_t0.json](https://chatgpt.com/library?file_id=libfile_c7d24876cf2c8191bbb6d439821fac0b&account_id=personal)
-- [Cenário B — cenario_B_espacadas.json](https://chatgpt.com/library?file_id=libfile_8cb15c7df3048191bdc41102916dad21&account_id=personal)
+- [Enunciado — TRABALHO M2 SO 2026_.pdf](TRABALHO%20M2%20SO%202026_.pdf)
+- [Cenário A — cenario_A_t0.json](../cenarios/cenario_A_t0.json)
+- [Cenário B — cenario_B_espacadas.json](../cenarios/cenario_B_espacadas.json)
 
 Os requisitos são os do enunciado. As propostas de arquitetura e as escolhas adicionais deste planejamento são decisões de implementação, sujeitas a ajuste se o AVA ou o professor trouxerem outra orientação.
 
