@@ -124,9 +124,6 @@ def main():
     def quebra(): story.append(PageBreak())
     def f(x): return f'{x:.2f}' if isinstance(x,float) else str(x)
 
-    titulo('Simulador de escalonamento multiprocessado com paginação sob demanda')
-    par('Sistemas Operacionais - Trabalho M2 - 03/11/2026')
-    par('Matheus Thurow, Rodrigo Nicola e Eduardo Bez')
     titulo('1. Introdução')
     par('Este trabalho apresenta um simulador em Python que reúne escalonamento de CPU e paginação sob demanda. Foram comparados FCFS, SJF e Round Robin em máquinas simuladas com 1 e 4 CPUs, usando as políticas de memória FIFO e LRU. O objetivo foi observar como essas escolhas afetam os tempos dos processos, as faltas de página e o uso das CPUs.')
     par('Foram usados dois cenários com os mesmos 1.000 processos: no A, todos chegam no instante zero; no B, as chegadas são distribuídas até o instante 10.604. São 952 processos curtos e 48 longos. Cada cenário exige 40.398 unidades de CPU, intercaladas com etapas de E/S.')

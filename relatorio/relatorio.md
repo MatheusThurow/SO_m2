@@ -3,13 +3,6 @@
 Universidade do Vale do Itajaí
 
 
-## Simulador de escalonamento multiprocessado com paginação sob demanda
-
-Sistemas Operacionais - Trabalho M2 - 03/11/2026
-
-Matheus Thurow, Rodrigo Nicola e Eduardo Bez
-
-
 ## 1. Introdução
 
 Este trabalho apresenta um simulador em Python que reúne escalonamento de CPU e paginação sob demanda. Foram comparados FCFS, SJF e Round Robin em máquinas simuladas com 1 e 4 CPUs, usando as políticas de memória FIFO e LRU. O objetivo foi observar como essas escolhas afetam os tempos dos processos, as faltas de página e o uso das CPUs.
