@@ -71,7 +71,7 @@ Cada execução termina 1.000 processos e consome 40.398 unidades de CPU.
 - `relatorio/relatorio.md`: versão textual com as mesmas evidências.
 - `DEFESA.md`: roteiro de demonstração e perguntas.
 - `STATUS.md`: estado das etapas do projeto.
-- `referencias/`: enunciado e planejamento original preservados como referência.
+- `referencias/`: enunciado do trabalho.
 
 ## Convenções do motor
 
