@@ -2,6 +2,7 @@
 import csv
 import json
 import os
+from io import BytesIO
 from pathlib import Path
 from statistics import mean
 from xml.sax.saxutils import escape
@@ -9,6 +10,11 @@ from xml.sax.saxutils import escape
 import matplotlib
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
+from matplotlib import font_manager
+from reportlab.pdfbase import pdfmetrics
+from reportlab.pdfbase.ttfonts import TTFont
+from reportlab.pdfgen import canvas as pdfcanvas
+from pypdf import PdfReader, PdfWriter
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4, landscape
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
@@ -25,6 +31,10 @@ def nome(r):
 
 
 def main():
+    for nome_fonte,peso in [('Arial','normal'),('Arial-Bold','bold')]:
+        caminho=font_manager.findfont(font_manager.FontProperties(family='Arial',weight=peso),fallback_to_default=False)
+        pdfmetrics.registerFont(TTFont(nome_fonte,caminho))
+    pdfmetrics.registerFontFamily('Arial',normal='Arial',bold='Arial-Bold')
     rs=[json.loads(p.read_text(encoding='utf-8')) for p in sorted(BASE.glob('*/resultado.json'))]
     assert len(rs)==32
     OUT.mkdir(parents=True,exist_ok=True)
@@ -34,7 +44,13 @@ def main():
         selecao=[r for r in rs if r['cenario']==cenario and r['config']['cpus']==cpus and r['config']['subst']==subst]
         return sorted(selecao,key=lambda r: (0 if r['config']['sched']=='fcfs' else 1 if r['config']['sched']=='sjf' else 2+r['config']['quantum']/100))
     cenarios=['cenario_A_t0','cenario_B_espacadas']
-    plt.rcParams.update({'font.size':10,'axes.spines.top':False,'axes.spines.right':False})
+    plt.rcParams.update({'font.family':'Arial','font.size':10,'axes.spines.top':False,'axes.spines.right':False})
+    # Figuras do relatório: mesmos dados de Gantt, com a fonte solicitada.
+    from simulador.saidas import figura_gantt
+    gantts_relatorio=Path('relatorio/gantts')
+    gantts_relatorio.mkdir(exist_ok=True)
+    for r in rs:
+        figura_gantt(r,gantts_relatorio/(r['id']+'.png'))
     fig,axs=plt.subplots(1,2,figsize=(12,4.5))
     for ax,cenario in zip(axs,cenarios):
         for j,cpus in enumerate([1,4]):
@@ -60,11 +76,11 @@ def main():
     ax.legend(); fig.tight_layout(); fig.savefig(GRAF/'speedup.png',dpi=180); plt.close(fig)
 
     styles=getSampleStyleSheet()
-    styles['Heading1'].fontName='Times-Bold'
+    styles['Heading1'].fontName='Arial-Bold'
     styles['Heading1'].fontSize=15
     styles['Heading1'].leading=18
-    styles.add(ParagraphStyle(name='CorpoM2',fontName='Times-Roman',fontSize=11,leading=14,spaceAfter=8))
-    styles.add(ParagraphStyle(name='CelulaM2',fontName='Times-Roman',fontSize=8,leading=10))
+    styles.add(ParagraphStyle(name='CorpoM2',fontName='Arial',fontSize=11,leading=14,spaceAfter=8))
+    styles.add(ParagraphStyle(name='CelulaM2',fontName='Arial',fontSize=8,leading=10))
     story=[]; md=[]
     def titulo(t):
         story.append(Paragraph(escape(t),styles['Heading1'])); md.append('\n## '+t+'\n')
@@ -78,7 +94,7 @@ def main():
             ('VALIGN',(0,0),(-1,-1),'MIDDLE'),('BOTTOMPADDING',(0,0),(-1,-1),5),('TOPPADDING',(0,0),(-1,-1),5),
             ('LINEBELOW',(0,0),(-1,0),.5,colors.black),('LINEBELOW',(0,-1),(-1,-1),.5,colors.black)]))
         # Paragraphs carry their own color, so set the header explicitly.
-        for cell in dados[0]: cell.style=ParagraphStyle(name='Cab',parent=styles['CelulaM2'],fontName='Times-Bold',textColor=colors.black)
+        for cell in dados[0]: cell.style=ParagraphStyle(name='Cab',parent=styles['CelulaM2'],fontName='Arial-Bold',textColor=colors.black)
         story.append(tab); story.append(Spacer(1,10))
         md.append('| '+' | '.join(headers)+' |\n| '+' | '.join(['---']*len(headers))+' |\n'+
                   '\n'.join('| '+' | '.join(str(x) for x in row)+' |' for row in linhas)+'\n')
@@ -144,7 +160,7 @@ def main():
                       if (e['evento'].startswith('P') if tipo=='útil' else e['evento']==tipo))
                   for tipo in ['útil','TROCA','OCIOSA']}
         par(f'{nome(exemplo)}, janela [0,200): soma entre CPUs de {por_tipo["útil"]} unidades úteis, {por_tipo["TROCA"]} de troca e {por_tipo["OCIOSA"]} ociosas. São parcelas da janela, distintas dos totais da execução no apêndice.')
-        figura(BASE/exemplo['id']/'gantt.png',600)
+        figura(gantts_relatorio/(exemplo['id']+'.png'),600)
     par('No cenário A/FCFS, a fila inicial de 1.000 processos faz a janela inicial ser dominada por instalação de contextos e primeiras faltas: mesmo ocupada, a CPU ainda não produz trabalho útil. No cenário B com 4 CPUs, chegadas espaçadas permitem retornos atendidos mais cedo; aparecem intervalos úteis e ociosos. O Gantt evidencia por que utilização que inclui troca não equivale a produtividade.')
     quebra(); titulo('7. FIFO e LRU')
     pares=[]
@@ -179,18 +195,44 @@ def main():
     for r in rs:
         quebra(); titulo(nome(r))
         par(r['id'])
-        figura(BASE/r['id']/'gantt.png',760)
+        figura(gantts_relatorio/(r['id']+'.png'),760)
         tabela(['CPU','Útil','Útil %','Troca','Troca %','Ocioso','Ocioso %','Trocas','Utilização %'],
             [[c['cpu'],c['util'],f(c['util_pct']),c['troca'],f(c['troca_pct']),c['ocioso'],f(c['ocioso_pct']),c['trocas'],f(c['utilizacao']*100)] for c in r['por_cpu']], [50]+[88]*8)
         par(f'Makespan {r["makespan"]}; espera média {r["espera_media"]:.2f}; resposta média {r["resposta_media"]:.2f}; faults {r["faults"]}; taxa {100*r["taxa_faults"]:.2f}%.')
     def rodape(canvas,doc):
-        canvas.setFont('Times-Roman',9)
+        canvas.setFont('Arial',9)
         canvas.setFillColor(colors.black)
         canvas.drawString(36,20,'Sistemas Operacionais - Trabalho M2')
         canvas.drawRightString(806,20,str(doc.page))
     doc=SimpleDocTemplate(str(OUT/'relatorio_m2.pdf'),pagesize=landscape(A4),rightMargin=36,leftMargin=36,topMargin=30,bottomMargin=36,
                           title='Trabalho M2 - Sistemas Operacionais',author='Matheus Thurow; Rodrigo Nicola; Eduardo Bez')
     doc.build(story,onFirstPage=rodape,onLaterPages=rodape)
+    capa=BytesIO()
+    c=pdfcanvas.Canvas(capa,pagesize=A4)
+    largura,altura=A4
+    c.drawImage('relatorio/assets/univali.png',(largura-150)/2,altura-165,width=150,height=150*40/59,mask='auto')
+    c.setFont('Arial-Bold',12)
+    c.drawCentredString(largura/2,altura-200,'UNIVERSIDADE DO VALE DO ITAJAÍ')
+    c.setFont('Arial',12)
+    c.drawCentredString(largura/2,altura-225,'Disciplina: Sistemas Operacionais')
+    for y,n in zip([altura-295,altura-315,altura-335],['Matheus Thurow','Rodrigo Nicola','Eduardo Bez']):
+        c.drawCentredString(largura/2,y,n)
+    c.setFont('Arial-Bold',14)
+    c.drawCentredString(largura/2,altura-440,'SIMULADOR DE ESCALONAMENTO')
+    c.drawCentredString(largura/2,altura-462,'MULTIPROCESSADO COM PAGINAÇÃO')
+    c.drawCentredString(largura/2,altura-484,'SOB DEMANDA')
+    c.setFont('Arial',12)
+    c.drawCentredString(largura/2,altura-520,'Trabalho M2')
+    c.drawCentredString(largura/2,65,'2026')
+    c.save()
+    capa.seek(0)
+    writer=PdfWriter()
+    writer.append(PdfReader(capa))
+    writer.append(PdfReader(str(OUT/'relatorio_m2.pdf')))
+    writer.add_metadata({'/Title':'Trabalho M2 - Sistemas Operacionais','/Author':'Matheus Thurow; Rodrigo Nicola; Eduardo Bez'})
+    with (OUT/'relatorio_m2.pdf').open('wb') as arquivo:
+        writer.write(arquivo)
+    md.insert(0,'![Univali](assets/univali.png)\n\nUniversidade do Vale do Itajaí\n')
     Path('relatorio/relatorio.md').write_text('\n'.join(md),encoding='utf-8')
     print(OUT/'relatorio_m2.pdf')
 

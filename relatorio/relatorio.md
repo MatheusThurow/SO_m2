@@ -1,3 +1,7 @@
+![Univali](assets/univali.png)
+
+Universidade do Vale do Itajaí
+
 
 ## Simulador de escalonamento multiprocessado com paginação sob demanda
 
@@ -126,11 +130,11 @@ B-4CPU-FCFS-FIFO apresenta speedup 4.79 e eficiência 119.75%, acima da referên
 
 A-1CPU-FCFS-LRU, janela [0,200): soma entre CPUs de 0 unidades úteis, 200 de troca e 0 ociosas. São parcelas da janela, distintas dos totais da execução no apêndice.
 
-![gantt](../resultados/cenario_A_t0_cpu1_fcfs_q0_lru_f256_c1/gantt.png)
+![cenario_A_t0_cpu1_fcfs_q0_lru_f256_c1](gantts/cenario_A_t0_cpu1_fcfs_q0_lru_f256_c1.png)
 
 B-4CPU-FCFS-LRU, janela [0,200): soma entre CPUs de 434 unidades úteis, 287 de troca e 79 ociosas. São parcelas da janela, distintas dos totais da execução no apêndice.
 
-![gantt](../resultados/cenario_B_espacadas_cpu4_fcfs_q0_lru_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu4_fcfs_q0_lru_f256_c1](gantts/cenario_B_espacadas_cpu4_fcfs_q0_lru_f256_c1.png)
 
 No cenário A/FCFS, a fila inicial de 1.000 processos faz a janela inicial ser dominada por instalação de contextos e primeiras faltas: mesmo ocupada, a CPU ainda não produz trabalho útil. No cenário B com 4 CPUs, chegadas espaçadas permitem retornos atendidos mais cedo; aparecem intervalos úteis e ociosos. O Gantt evidencia por que utilização que inclui troca não equivale a produtividade.
 
@@ -228,7 +232,7 @@ Cada página seguinte identifica uma configuração e mostra a janela 0 a 200. P
 
 cenario_A_t0_cpu1_fcfs_q0_fifo_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu1_fcfs_q0_fifo_f256_c1/gantt.png)
+![cenario_A_t0_cpu1_fcfs_q0_fifo_f256_c1](gantts/cenario_A_t0_cpu1_fcfs_q0_fifo_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -241,7 +245,7 @@ Makespan 65613; espera média 11697.93; resposta média 499.50; faults 22174; ta
 
 cenario_A_t0_cpu1_fcfs_q0_lru_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu1_fcfs_q0_lru_f256_c1/gantt.png)
+![cenario_A_t0_cpu1_fcfs_q0_lru_f256_c1](gantts/cenario_A_t0_cpu1_fcfs_q0_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -254,7 +258,7 @@ Makespan 64665; espera média 11650.15; resposta média 499.50; faults 21252; ta
 
 cenario_A_t0_cpu1_rr_q10_lru_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu1_rr_q10_lru_f256_c1/gantt.png)
+![cenario_A_t0_cpu1_rr_q10_lru_f256_c1](gantts/cenario_A_t0_cpu1_rr_q10_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -267,7 +271,7 @@ Makespan 65429; espera média 11702.34; resposta média 499.50; faults 21160; ta
 
 cenario_A_t0_cpu1_rr_q20_lru_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu1_rr_q20_lru_f256_c1/gantt.png)
+![cenario_A_t0_cpu1_rr_q20_lru_f256_c1](gantts/cenario_A_t0_cpu1_rr_q20_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -280,7 +284,7 @@ Makespan 64834; espera média 11657.25; resposta média 499.50; faults 21293; ta
 
 cenario_A_t0_cpu1_rr_q2_lru_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu1_rr_q2_lru_f256_c1/gantt.png)
+![cenario_A_t0_cpu1_rr_q2_lru_f256_c1](gantts/cenario_A_t0_cpu1_rr_q2_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -293,7 +297,7 @@ Makespan 74864; espera média 12259.50; resposta média 499.50; faults 20711; ta
 
 cenario_A_t0_cpu1_rr_q50_lru_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu1_rr_q50_lru_f256_c1/gantt.png)
+![cenario_A_t0_cpu1_rr_q50_lru_f256_c1](gantts/cenario_A_t0_cpu1_rr_q50_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -306,7 +310,7 @@ Makespan 64653; espera média 11648.85; resposta média 499.50; faults 21252; ta
 
 cenario_A_t0_cpu1_rr_q5_lru_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu1_rr_q5_lru_f256_c1/gantt.png)
+![cenario_A_t0_cpu1_rr_q5_lru_f256_c1](gantts/cenario_A_t0_cpu1_rr_q5_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -319,7 +323,7 @@ Makespan 67309; espera média 11776.18; resposta média 499.50; faults 20999; ta
 
 cenario_A_t0_cpu1_sjf_q0_lru_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu1_sjf_q0_lru_f256_c1/gantt.png)
+![cenario_A_t0_cpu1_sjf_q0_lru_f256_c1](gantts/cenario_A_t0_cpu1_sjf_q0_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -332,7 +336,7 @@ Makespan 50931; espera média 14319.05; resposta média 7257.21; faults 7335; ta
 
 cenario_A_t0_cpu4_fcfs_q0_fifo_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu4_fcfs_q0_fifo_f256_c1/gantt.png)
+![cenario_A_t0_cpu4_fcfs_q0_fifo_f256_c1](gantts/cenario_A_t0_cpu4_fcfs_q0_fifo_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -348,7 +352,7 @@ Makespan 16417; espera média 2746.78; resposta média 124.50; faults 21821; tax
 
 cenario_A_t0_cpu4_fcfs_q0_lru_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu4_fcfs_q0_lru_f256_c1/gantt.png)
+![cenario_A_t0_cpu4_fcfs_q0_lru_f256_c1](gantts/cenario_A_t0_cpu4_fcfs_q0_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -364,7 +368,7 @@ Makespan 16303; espera média 2752.89; resposta média 124.50; faults 20861; tax
 
 cenario_A_t0_cpu4_rr_q10_lru_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu4_rr_q10_lru_f256_c1/gantt.png)
+![cenario_A_t0_cpu4_rr_q10_lru_f256_c1](gantts/cenario_A_t0_cpu4_rr_q10_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -380,7 +384,7 @@ Makespan 16385; espera média 2763.79; resposta média 124.50; faults 20728; tax
 
 cenario_A_t0_cpu4_rr_q20_lru_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu4_rr_q20_lru_f256_c1/gantt.png)
+![cenario_A_t0_cpu4_rr_q20_lru_f256_c1](gantts/cenario_A_t0_cpu4_rr_q20_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -396,7 +400,7 @@ Makespan 16310; espera média 2754.30; resposta média 124.50; faults 20818; tax
 
 cenario_A_t0_cpu4_rr_q2_lru_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu4_rr_q2_lru_f256_c1/gantt.png)
+![cenario_A_t0_cpu4_rr_q2_lru_f256_c1](gantts/cenario_A_t0_cpu4_rr_q2_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -412,7 +416,7 @@ Makespan 18769; espera média 2904.74; resposta média 124.50; faults 20540; tax
 
 cenario_A_t0_cpu4_rr_q50_lru_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu4_rr_q50_lru_f256_c1/gantt.png)
+![cenario_A_t0_cpu4_rr_q50_lru_f256_c1](gantts/cenario_A_t0_cpu4_rr_q50_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -428,7 +432,7 @@ Makespan 16286; espera média 2752.66; resposta média 124.50; faults 20839; tax
 
 cenario_A_t0_cpu4_rr_q5_lru_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu4_rr_q5_lru_f256_c1/gantt.png)
+![cenario_A_t0_cpu4_rr_q5_lru_f256_c1](gantts/cenario_A_t0_cpu4_rr_q5_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -444,7 +448,7 @@ Makespan 16845; espera média 2782.86; resposta média 124.50; faults 20598; tax
 
 cenario_A_t0_cpu4_sjf_q0_lru_f256_c1
 
-![gantt](../resultados/cenario_A_t0_cpu4_sjf_q0_lru_f256_c1/gantt.png)
+![cenario_A_t0_cpu4_sjf_q0_lru_f256_c1](gantts/cenario_A_t0_cpu4_sjf_q0_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -460,7 +464,7 @@ Makespan 13359; espera média 3466.59; resposta média 1771.17; faults 8064; tax
 
 cenario_B_espacadas_cpu1_fcfs_q0_fifo_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu1_fcfs_q0_fifo_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu1_fcfs_q0_fifo_f256_c1](gantts/cenario_B_espacadas_cpu1_fcfs_q0_fifo_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -473,7 +477,7 @@ Makespan 64863; espera média 11009.08; resposta média 493.21; faults 21425; ta
 
 cenario_B_espacadas_cpu1_fcfs_q0_lru_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu1_fcfs_q0_lru_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu1_fcfs_q0_lru_f256_c1](gantts/cenario_B_espacadas_cpu1_fcfs_q0_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -486,7 +490,7 @@ Makespan 63989; espera média 10991.44; resposta média 493.19; faults 20570; ta
 
 cenario_B_espacadas_cpu1_rr_q10_lru_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu1_rr_q10_lru_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu1_rr_q10_lru_f256_c1](gantts/cenario_B_espacadas_cpu1_rr_q10_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -499,7 +503,7 @@ Makespan 64685; espera média 11030.26; resposta média 493.19; faults 20415; ta
 
 cenario_B_espacadas_cpu1_rr_q20_lru_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu1_rr_q20_lru_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu1_rr_q20_lru_f256_c1](gantts/cenario_B_espacadas_cpu1_rr_q20_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -512,7 +516,7 @@ Makespan 64114; espera média 11000.11; resposta média 493.19; faults 20576; ta
 
 cenario_B_espacadas_cpu1_rr_q2_lru_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu1_rr_q2_lru_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu1_rr_q2_lru_f256_c1](gantts/cenario_B_espacadas_cpu1_rr_q2_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -525,7 +529,7 @@ Makespan 74688; espera média 11744.28; resposta média 490.66; faults 20215; ta
 
 cenario_B_espacadas_cpu1_rr_q50_lru_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu1_rr_q50_lru_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu1_rr_q50_lru_f256_c1](gantts/cenario_B_espacadas_cpu1_rr_q50_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -538,7 +542,7 @@ Makespan 63965; espera média 10989.91; resposta média 493.19; faults 20576; ta
 
 cenario_B_espacadas_cpu1_rr_q5_lru_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu1_rr_q5_lru_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu1_rr_q5_lru_f256_c1](gantts/cenario_B_espacadas_cpu1_rr_q5_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -551,7 +555,7 @@ Makespan 66667; espera média 11144.34; resposta média 493.76; faults 20327; ta
 
 cenario_B_espacadas_cpu1_sjf_q0_lru_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu1_sjf_q0_lru_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu1_sjf_q0_lru_f256_c1](gantts/cenario_B_espacadas_cpu1_sjf_q0_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -564,7 +568,7 @@ Makespan 50437; espera média 8606.07; resposta média 3423.16; faults 6865; tax
 
 cenario_B_espacadas_cpu4_fcfs_q0_fifo_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu4_fcfs_q0_fifo_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu4_fcfs_q0_fifo_f256_c1](gantts/cenario_B_espacadas_cpu4_fcfs_q0_fifo_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -580,7 +584,7 @@ Makespan 13541; espera média 466.44; resposta média 37.13; faults 9371; taxa 2
 
 cenario_B_espacadas_cpu4_fcfs_q0_lru_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu4_fcfs_q0_lru_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu4_fcfs_q0_lru_f256_c1](gantts/cenario_B_espacadas_cpu4_fcfs_q0_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -596,7 +600,7 @@ Makespan 13421; espera média 527.24; resposta média 41.97; faults 9263; taxa 2
 
 cenario_B_espacadas_cpu4_rr_q10_lru_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu4_rr_q10_lru_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu4_rr_q10_lru_f256_c1](gantts/cenario_B_espacadas_cpu4_rr_q10_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -612,7 +616,7 @@ Makespan 13814; espera média 512.07; resposta média 36.07; faults 9523; taxa 2
 
 cenario_B_espacadas_cpu4_rr_q20_lru_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu4_rr_q20_lru_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu4_rr_q20_lru_f256_c1](gantts/cenario_B_espacadas_cpu4_rr_q20_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -628,7 +632,7 @@ Makespan 13642; espera média 525.12; resposta média 38.87; faults 9617; taxa 2
 
 cenario_B_espacadas_cpu4_rr_q2_lru_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu4_rr_q2_lru_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu4_rr_q2_lru_f256_c1](gantts/cenario_B_espacadas_cpu4_rr_q2_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -644,7 +648,7 @@ Makespan 17723; espera média 855.18; resposta média 31.34; faults 12138; taxa 
 
 cenario_B_espacadas_cpu4_rr_q50_lru_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu4_rr_q50_lru_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu4_rr_q50_lru_f256_c1](gantts/cenario_B_espacadas_cpu4_rr_q50_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -660,7 +664,7 @@ Makespan 13537; espera média 523.81; resposta média 40.04; faults 9425; taxa 2
 
 cenario_B_espacadas_cpu4_rr_q5_lru_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu4_rr_q5_lru_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu4_rr_q5_lru_f256_c1](gantts/cenario_B_espacadas_cpu4_rr_q5_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
@@ -676,7 +680,7 @@ Makespan 14503; espera média 532.82; resposta média 32.00; faults 9833; taxa 2
 
 cenario_B_espacadas_cpu4_sjf_q0_lru_f256_c1
 
-![gantt](../resultados/cenario_B_espacadas_cpu4_sjf_q0_lru_f256_c1/gantt.png)
+![cenario_B_espacadas_cpu4_sjf_q0_lru_f256_c1](gantts/cenario_B_espacadas_cpu4_sjf_q0_lru_f256_c1.png)
 
 | CPU | Útil | Útil % | Troca | Troca % | Ocioso | Ocioso % | Trocas | Utilização % |
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |

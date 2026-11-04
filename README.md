@@ -8,6 +8,8 @@
 Requer Python 3.11 ou superior. Validado com **Python 3.14.7 no Windows**.
 O núcleo usa apenas a biblioteca padrão; matplotlib gera figuras, reportlab gera o relatório
 e pypdf verifica o PDF. Versões medidas estão em `requirements-lock.txt`.
+Para gerar novamente o relatório, a fonte Arial precisa estar instalada no computador.
+O PDF pronto já incorpora a fonte e pode ser lido sem essa instalação.
 
 ```powershell
 python -m venv .venv

@@ -1,6 +1,8 @@
 {
-  "pdf_paginas": 44,
-  "paginas_renderizadas": 44,
-  "revisao_visual": "Aprovada: tabelas, graficos, 32 Gantts, paginas sem recortes de texto",
+  "pdf_paginas": 45,
+  "paginas_renderizadas": 45,
+  "fonte": "Arial incorporada",
+  "capa": "Logo Univali e identificacao da equipe",
+  "revisao_visual": "Aprovada",
   "limites_texto": "OK"
 }
