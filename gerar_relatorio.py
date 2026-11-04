@@ -18,7 +18,7 @@ from pypdf import PdfReader, PdfWriter
 from reportlab.lib import colors
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image, PageBreak
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image, PageBreak, KeepTogether
 
 BASE=Path('resultados')
 OUT=Path('output/pdf')
@@ -50,7 +50,7 @@ def main():
     gantts_relatorio.mkdir(exist_ok=True)
     for r in rs:
         from matplotlib.patches import Patch
-        fig,axs=plt.subplots(2,1,figsize=(7.2,3.2 if r['config']['cpus']==1 else 5.8))
+        fig,axs=plt.subplots(2,1,figsize=(7.2,1.9 if r['config']['cpus']==1 else 3.0))
         for ax,(inicio,fim) in zip(axs,[(0,100),(100,200)]):
             for e in r['gantt']:
                 a,b=max(inicio,e['inicio']),min(fim,e['fim'])
@@ -59,7 +59,7 @@ def main():
                 cor='#cbd5e1' if evento=='OCIOSA' else '#334155' if evento=='TROCA' else plt.cm.tab20(int(evento[1:])%20)
                 ax.barh(e['cpu'],b-a,left=a,height=.65,color=cor,edgecolor='white',linewidth=.2)
                 if evento.startswith('P'):
-                    ax.text((a+b)/2,e['cpu'],evento,rotation=90,ha='center',va='center',fontsize=7,clip_on=True)
+                    ax.text((a+b)/2,e['cpu'],evento,rotation=90,ha='center',va='center',fontsize=6,clip_on=True)
             ax.set(xlim=(inicio,fim),yticks=range(r['config']['cpus']),yticklabels=[f'CPU {i}' for i in range(r['config']['cpus'])])
             ax.set_xticks(range(inicio,fim+1,10));ax.tick_params(labelsize=8)
             ax.grid(axis='x',alpha=.15)
@@ -95,12 +95,14 @@ def main():
     styles['Heading1'].fontSize=15
     styles['Heading1'].leading=18
     styles.add(ParagraphStyle(name='CorpoM2',fontName='Arial',fontSize=11,leading=14,spaceAfter=8))
-    styles.add(ParagraphStyle(name='CelulaM2',fontName='Arial',fontSize=8,leading=10))
+    styles.add(ParagraphStyle(name='CelulaM2',fontName='Arial',fontSize=7.5,leading=9))
+    styles.add(ParagraphStyle(name='CompactoM2',fontName='Arial',fontSize=9,leading=11,spaceAfter=4))
+    styles.add(ParagraphStyle(name='TituloCompactoM2',fontName='Arial-Bold',fontSize=11,leading=14,spaceAfter=4))
     story=[]; md=[]
-    def titulo(t):
-        story.append(Paragraph(escape(t),styles['Heading1'])); md.append('\n## '+t+'\n')
-    def par(t):
-        story.append(Paragraph(escape(t),styles['CorpoM2'])); md.append(t+'\n')
+    def titulo(t,compacto=False):
+        story.append(Paragraph(escape(t),styles['TituloCompactoM2' if compacto else 'Heading1'])); md.append('\n## '+t+'\n')
+    def par(t,compacto=False):
+        story.append(Paragraph(escape(t),styles['CompactoM2' if compacto else 'CorpoM2'])); md.append(t+'\n')
     def tabela(headers,linhas,widths=None):
         if widths:
             widths=[v*515/sum(widths) for v in widths]
@@ -108,7 +110,7 @@ def main():
         tab=Table(dados,colWidths=widths,repeatRows=1,hAlign='LEFT')
         tab.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),colors.HexColor('#e8e8e8')),
             ('TEXTCOLOR',(0,0),(-1,0),colors.black),
-            ('VALIGN',(0,0),(-1,-1),'MIDDLE'),('BOTTOMPADDING',(0,0),(-1,-1),5),('TOPPADDING',(0,0),(-1,-1),5),
+            ('VALIGN',(0,0),(-1,-1),'MIDDLE'),('BOTTOMPADDING',(0,0),(-1,-1),3),('TOPPADDING',(0,0),(-1,-1),3),
             ('LINEBELOW',(0,0),(-1,0),.5,colors.black),('LINEBELOW',(0,-1),(-1,-1),.5,colors.black)]))
         # Paragraphs carry their own color, so set the header explicitly.
         for cell in dados[0]: cell.style=ParagraphStyle(name='Cab',parent=styles['CelulaM2'],fontName='Arial-Bold',textColor=colors.black)
@@ -150,7 +152,6 @@ def main():
         par('Valores de tempo em unidades simuladas. Identificação: cenário-CPUs-política[-quantum]-memória. Todos os casos usam 256 quadros e custo de troca 1. Speedup e eficiência indicam o par 1/4 CPUs da mesma configuração, repetidos nas duas linhas.')
         headers=['Execução','Fim','Espera média','Espera máx.','Turn. médio','Resp. média','Trocas','Faults','Taxa %','Speedup','Efic. %']
         tabela(headers[:7],[[nome(r)]+[f(r[k]) for k in ['makespan','espera_media','espera_maxima','turnaround_medio','resposta_media','trocas']] for r in linhas],[145]+[61]*6)
-        quebra();titulo('4. Resultados - cenário '+('A' if cenario==cenarios[0] else 'B')+' (continuação)')
         par('Faltas de página e ganho de desempenho para as mesmas configurações da tabela anterior.')
         tabela(['Execução','Faults','Taxa %','Speedup','Efic. %'],[[nome(r),r['faults'],f(100*r['taxa_faults']),f(r['speedup']),f(100*r['eficiencia'])] for r in linhas],[170,86,86,86,86])
     quebra(); titulo('5. Comparação dos escalonadores')
@@ -190,8 +191,9 @@ def main():
     tabela(['FIFO (par com LRU)','Faults FIFO','Faults LRU','Fim FIFO','Fim LRU','Espera FIFO','Espera LRU'],pares,[220]+[88]*6)
     par('O LRU teve menos faults e menor makespan nos quatro pares. Mesmo assim, não foi melhor em toda métrica: no cenário B com 4 CPUs, o FIFO teve menor espera média. Os resultados mostram que a substituição de páginas também altera a ordem e o tempo de retorno dos processos à fila.')
     par('A quantidade de faults não basta para afirmar que houve thrashing. Parte das faltas ocorre porque as páginas ainda não foram carregadas. Seria necessário acompanhar o conjunto de trabalho ao longo do tempo para separar esse efeito das substituições frequentes.')
+    quebra()
     for cenario in cenarios:
-        quebra(); titulo('8. Espera de processos curtos e longos - cenário '+('A' if cenario==cenarios[0] else 'B'))
+        titulo('8. Espera de processos curtos e longos - cenário '+('A' if cenario==cenarios[0] else 'B'))
         justica=[]
         for r in rs:
             if r['cenario']!=cenario: continue
@@ -209,14 +211,20 @@ def main():
     titulo('Referências')
     par('Enunciado do Trabalho M2 de Sistemas Operacionais (2026) e arquivos cenario_A_t0.json e cenario_B_espacadas.json, fornecidos para a atividade. Código, instruções e resultados: https://github.com/MatheusThurow/SO_m2.')
     titulo('Apêndice - Gantts e tempos por CPU')
-    par('Cada página seguinte identifica uma configuração e mostra a janela 0 a 200. Pn identifica o processo; TROCA e OCIOSA usam a legenda. Os CSVs preservam exatamente cada intervalo e permitem ampliar qualquer trecho. A tabela abaixo de cada figura cobre toda a execução, e não apenas a janela do gráfico.')
-    for r in rs:
-        quebra(); titulo(nome(r))
-        par(r['id'])
+    par('O apêndice reúne duas configurações por página. Cada figura mostra a janela 0 a 200, dividida em dois trechos. Pn identifica o processo; TROCA e OCIOSA usam a legenda. Os CSVs preservam os intervalos para consulta. As tabelas por CPU cobrem toda a execução.')
+    for indice,r in enumerate(rs):
+        if indice%2==0: quebra()
+        inicio_bloco=len(story)
+        titulo(nome(r),compacto=True)
+        par(r['id'],compacto=True)
         figura(gantts_relatorio/(r['id']+'.png'),760)
         tabela(['CPU','Útil','Útil %','Troca','Troca %','Ocioso','Ocioso %','Trocas','Utilização %'],
             [[c['cpu'],c['util'],f(c['util_pct']),c['troca'],f(c['troca_pct']),c['ocioso'],f(c['ocioso_pct']),c['trocas'],f(c['utilizacao']*100)] for c in r['por_cpu']], [50]+[88]*8)
-        par(f'Makespan {r["makespan"]}; espera média {r["espera_media"]:.2f}; resposta média {r["resposta_media"]:.2f}; faults {r["faults"]}; taxa {100*r["taxa_faults"]:.2f}%.')
+        par(f'Makespan {r["makespan"]}; espera média {r["espera_media"]:.2f}; resposta média {r["resposta_media"]:.2f}; faults {r["faults"]}; taxa {100*r["taxa_faults"]:.2f}%.',compacto=True)
+        bloco=story[inicio_bloco:]
+        del story[inicio_bloco:]
+        story.append(KeepTogether(bloco))
+        story.append(Spacer(1,12))
     def rodape(canvas,doc):
         canvas.setFont('Arial',9)
         canvas.setFillColor(colors.black)

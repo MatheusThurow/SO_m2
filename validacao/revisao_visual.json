@@ -1,8 +1,8 @@
 {
-  "pdf_paginas": 47,
-  "paginas_renderizadas": 47,
-  "orientacao": "Todas em A4 retrato",
+  "pdf_paginas": 28,
+  "paginas_renderizadas": 28,
+  "orientacao": "A4 retrato",
   "fonte": "Arial incorporada",
-  "revisao_visual": "Aprovada",
+  "revisao_visual": "Aprovada: duas configuracoes por pagina no apendice",
   "limites_texto": "OK"
 }

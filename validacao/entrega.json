@@ -2,7 +2,7 @@
   "configuracoes": 32,
   "processos_verificados": 32000,
   "gantts": 32,
-  "paginas_pdf": 47,
+  "paginas_pdf": 28,
   "hashes": "OK",
   "metricas": "OK",
   "gantt_contiguo_0_200": "OK",

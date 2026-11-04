@@ -63,9 +63,6 @@ Valores de tempo em unidades simuladas. Identificação: cenário-CPUs-política
 | A-4CPU-RR-Q5-LRU | 16845 | 2782.86 | 12620 | 6337.50 | 124.50 | 26510 |
 | A-4CPU-SJF-LRU | 13359 | 3466.59 | 12239 | 3713.98 | 1771.17 | 11029 |
 
-
-## 4. Resultados - cenário A (continuação)
-
 Faltas de página e ganho de desempenho para as mesmas configurações da tabela anterior.
 
 | Execução | Faults | Taxa % | Speedup | Efic. % |
@@ -110,9 +107,6 @@ Valores de tempo em unidades simuladas. Identificação: cenário-CPUs-política
 | B-4CPU-RR-Q50-LRU | 13537 | 523.81 | 6127 | 799.84 | 40.04 | 12443 |
 | B-4CPU-RR-Q5-LRU | 14503 | 532.82 | 7790 | 821.07 | 32.00 | 16508 |
 | B-4CPU-SJF-LRU | 12843 | 165.36 | 8786 | 365.04 | 19.36 | 8755 |
-
-
-## 4. Resultados - cenário B (continuação)
 
 Faltas de página e ganho de desempenho para as mesmas configurações da tabela anterior.
 
@@ -266,7 +260,7 @@ Enunciado do Trabalho M2 de Sistemas Operacionais (2026) e arquivos cenario_A_t0
 
 ## Apêndice - Gantts e tempos por CPU
 
-Cada página seguinte identifica uma configuração e mostra a janela 0 a 200. Pn identifica o processo; TROCA e OCIOSA usam a legenda. Os CSVs preservam exatamente cada intervalo e permitem ampliar qualquer trecho. A tabela abaixo de cada figura cobre toda a execução, e não apenas a janela do gráfico.
+O apêndice reúne duas configurações por página. Cada figura mostra a janela 0 a 200, dividida em dois trechos. Pn identifica o processo; TROCA e OCIOSA usam a legenda. Os CSVs preservam os intervalos para consulta. As tabelas por CPU cobrem toda a execução.
 
 
 ## A-1CPU-FCFS-FIFO
