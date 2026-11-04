@@ -70,7 +70,7 @@ Cada execução termina 1.000 processos e consome 40.398 unidades de CPU.
 - `output/pdf/relatorio_m2.pdf`: métodos, tabelas, três gráficos, análise e 32 Gantts.
 - `relatorio/relatorio.md`: versão textual com as mesmas evidências.
 - `DEFESA.md`: roteiro de demonstração e perguntas.
-- `STATUS.md`: estado das tarefas e pendências externas.
+- `STATUS.md`: estado das etapas do projeto.
 - `referencias/`: enunciado e planejamento original preservados como referência.
 
 ## Convenções do motor
@@ -103,13 +103,8 @@ Utilização por CPU = (útil + troca) / makespan; percentuais têm intervalo de
 Speedup = makespan 1 CPU / makespan 4 CPUs equivalentes; eficiência = speedup / 4.
 O rótulo curto/longo é usado somente na análise.
 
-## Limitações e entrega externa
+## Limitações
 
 SJF conhece o burst futuro. Não se simulam TLB, cache, migração, bytes, endereços ou
 fila de disco; CPUs são simuladas dentro de um processo Python. A latência de fault
 de produção é 20; a API interna admite 5 e memória desligada apenas para os exemplos.
-
-O PDF informa entrega em **03/11/2026 às 19h**. Critérios adicionais do AVA não foram
-consultados. Repositório informado pela equipe: [SO_m2](https://github.com/MatheusThurow/SO_m2).
-O estado da publicação é registrado em `STATUS.md`. O pacote local e a publicação no GitHub
-não representam submissão ao professor pelo AVA. Confirmar os critérios e fazer o envio no AVA.

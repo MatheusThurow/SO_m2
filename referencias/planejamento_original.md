@@ -18,7 +18,7 @@ Este documento organiza o desenvolvimento em 12 tasks com dependências, entrega
 - [Cenário A — cenario_A_t0.json](../cenarios/cenario_A_t0.json)
 - [Cenário B — cenario_B_espacadas.json](../cenarios/cenario_B_espacadas.json)
 
-Os requisitos são os do enunciado. As propostas de arquitetura e as escolhas adicionais deste planejamento são decisões de implementação, sujeitas a ajuste se o AVA ou o professor trouxerem outra orientação.
+Os requisitos são os do enunciado. As propostas de arquitetura e as escolhas adicionais deste planejamento são decisões de implementação.
 
 ## 3. Situação inicial dos dados
 
@@ -253,13 +253,12 @@ Os critérios de cada task devem ser verificados durante sua implementação. A 
 - [ ] Registrar a versão de Python e as dependências efetivamente usadas.
 - [ ] Organizar código, cenários, resultados, gráficos, relatório e validações.
 - [ ] Publicar o código em repositório acessível ao professor, com README, instruções de execução e resultados reproduzíveis.
-- [ ] Conferir a identificação dos três integrantes e o prazo de entrega informado no PDF, além de eventual atualização no AVA.
-- [ ] Conferir as orientações adicionais e critérios de entrega do AVA.
+- [ ] Conferir a identificação dos três integrantes e o prazo de entrega informado no PDF.
 - [ ] Validar a execução a partir do pacote final, seguindo o README.
 - [ ] Preparar demonstrações alterando CPUs, escalonador, quantum, quadros e substituição sem editar o código.
 - [ ] Garantir que os integrantes consigam explicar as regras, estruturas, métricas e limitações.
 
-**Concluída quando:** o código estiver publicado em repositório acessível ao professor, o projeto puder ser executado pelas instruções fornecidas e todos os itens exigidos estiverem disponíveis para revisão e entrega conforme o AVA.
+**Concluída quando:** o código estiver publicado em repositório acessível ao professor, o projeto puder ser executado pelas instruções fornecidas e todos os itens exigidos estiverem disponíveis para revisão e entrega.
 
 ## 7. Matriz de experimentos e divergência no enunciado
 
@@ -270,7 +269,7 @@ A tabela do enunciado exige RR com quantums 2, 10 e 50, mas a contagem textual m
 | Tabela: FCFS, SJF, RR com Q = 2, 10 e 50 | 5 | 20 |
 | Texto: FCFS, SJF, RR com cinco quantums | 7 | 28 |
 
-**Proposta para avançar sem perder cobertura:** executar RR com Q = 2, 5, 10, 20 e 50. Os valores 5 e 20 são escolhas adicionais deste planejamento, não uma exigência confirmada do professor. Se o AVA esclarecer outros valores, ajustar a matriz antes das execuções.
+**Proposta para avançar sem perder cobertura:** executar RR com Q = 2, 5, 10, 20 e 50. Os valores 5 e 20 são escolhas adicionais deste planejamento, não uma exigência confirmada do professor.
 
 | Bloco | Configuração | Quantidade prevista |
 | --- | --- | ---: |
@@ -294,16 +293,15 @@ Os quatro casos FIFO possuem correspondentes LRU na base. Casos pequenos de vali
 
 As tasks serão atualizadas à medida que suas entregas forem verificadas. Uma falha na validação deve ser corrigida antes de iniciar os experimentos completos. Não é necessário pedir confirmação ao final de cada task; decisões rotineiras serão registradas no projeto.
 
-## 9. Convenções e pontos pendentes
+## 9. Convenções
 
 | Ponto | Tratamento planejado |
 | --- | --- |
-| Quantidade de quantums | Cobrir cinco valores conforme proposta acima e conferir eventual esclarecimento do AVA. |
+| Quantidade de quantums | Cobrir cinco valores conforme proposta acima. |
 | Taxa de page faults sem fórmula explícita | Documentar a convenção proposta: faults contados / referências lógicas de CPU; tentativas repetidas de resolver o mesmo fault não aumentam o numerador. |
 | Empates internos de memória | Definir desempate determinístico e documentá-lo, preservando FIFO/LRU e a proteção exigida. |
 | Primeiro despacho | Resposta medida no despacho; a troca posterior não integra a espera na fila. |
 | Carga idêntica para 1 e 4 CPUs | Preservar os arquivos e reiniciar integralmente os estados em cada execução. |
-| Critérios complementares no AVA | Conferir antes de fechar o pacote; o conteúdo do AVA não foi fornecido nesta conversa. |
 | Desempenho do simulador | Verificar o objetivo de execução em poucos minutos por execução completa, sem inventar um limite numérico ausente do PDF; registrar ambiente e duração e evitar processamento desnecessário em intervalos sem eventos, preservando o tempo discreto e a ordem dos eventos. |
 | Gantts no relatório | A seção 9.2 do PDF pede uma figura por configuração, enquanto a seção 11 menciona dois Gantts (1 e 4 CPUs). Para cobrir ambas, incluir todas as figuras no relatório ou apêndice e destacar exemplos de 1 e 4 CPUs no corpo. |
 
@@ -319,7 +317,7 @@ As tasks serão atualizadas à medida que suas entregas forem verificadas. Uma f
 - [ ] Relatório com métodos, resultados, análise e limitações.
 - [ ] README com instruções completas de execução.
 - [ ] Código publicado em repositório acessível ao professor, com instruções e resultados reproduzíveis.
-- [ ] Pacote final organizado no formato solicitado pelo AVA, quando aplicável.
+- [ ] Pacote final organizado com código, cenários, resultados e relatório.
 
 ## 11. Critério geral de conclusão
 

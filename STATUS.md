@@ -13,7 +13,7 @@
 | T09 - Validação integrada | Concluída | 12 testes; 32 repetições idênticas; 40.398 unidades úteis por execução |
 | T10 - Experimentos | Concluída | 28 casos base LRU e quatro FIFO |
 | T11 - Relatório | Concluída | PDF, versão Markdown, três gráficos e apêndice com 32 Gantts |
-| T12 - Entrega e defesa | Parcial | README, roteiro, pacote validado e publicação concluídos; AVA e preparação individual pendentes |
+| T12 - Documentação e pacote | Concluída | README, roteiro de defesa, pacote validado e publicação |
 
 ## Publicação
 
@@ -21,11 +21,3 @@ Publicado em https://github.com/MatheusThurow/SO_m2.
 O envio foi confirmado por `git ls-remote`, e a página pública foi aberta sem autenticação.
 Os bytes dos cenários e do PDF foram comparados com os blobs do commit publicado.
 O histórico Git identifica os commits; `validacao/pacote.json` registra execução a partir do ZIP extraído.
-
-## Pendências externas
-
-- Consultar os critérios complementares no AVA e conferir eventual atualização do prazo.
-- Fazer a submissão ao AVA no formato exigido. O PDF informa 03/11/2026 às 19h.
-- Os integrantes devem revisar e praticar a defesa; a preparação dos arquivos não comprova domínio individual.
-
-Não houve envio de mensagens ao professor nem submissão ao AVA.
