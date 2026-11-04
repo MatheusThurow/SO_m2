@@ -1,8 +1,8 @@
 {
-  "pdf_paginas": 45,
-  "paginas_renderizadas": 45,
+  "pdf_paginas": 47,
+  "paginas_renderizadas": 47,
+  "orientacao": "Todas em A4 retrato",
   "fonte": "Arial incorporada",
-  "capa": "Logo Univali e identificacao da equipe",
   "revisao_visual": "Aprovada",
   "limites_texto": "OK"
 }

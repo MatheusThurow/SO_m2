@@ -16,7 +16,7 @@ from reportlab.pdfbase.ttfonts import TTFont
 from reportlab.pdfgen import canvas as pdfcanvas
 from pypdf import PdfReader, PdfWriter
 from reportlab.lib import colors
-from reportlab.lib.pagesizes import A4, landscape
+from reportlab.lib.pagesizes import A4
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image, PageBreak
 
@@ -46,19 +46,34 @@ def main():
     cenarios=['cenario_A_t0','cenario_B_espacadas']
     plt.rcParams.update({'font.family':'Arial','font.size':10,'axes.spines.top':False,'axes.spines.right':False})
     # Figuras do relatório: mesmos dados de Gantt, com a fonte solicitada.
-    from simulador.saidas import figura_gantt
     gantts_relatorio=Path('relatorio/gantts')
     gantts_relatorio.mkdir(exist_ok=True)
     for r in rs:
-        figura_gantt(r,gantts_relatorio/(r['id']+'.png'))
-    fig,axs=plt.subplots(1,2,figsize=(12,4.5))
+        from matplotlib.patches import Patch
+        fig,axs=plt.subplots(2,1,figsize=(7.2,3.2 if r['config']['cpus']==1 else 5.8))
+        for ax,(inicio,fim) in zip(axs,[(0,100),(100,200)]):
+            for e in r['gantt']:
+                a,b=max(inicio,e['inicio']),min(fim,e['fim'])
+                if b<=a: continue
+                evento=e['evento']
+                cor='#cbd5e1' if evento=='OCIOSA' else '#334155' if evento=='TROCA' else plt.cm.tab20(int(evento[1:])%20)
+                ax.barh(e['cpu'],b-a,left=a,height=.65,color=cor,edgecolor='white',linewidth=.2)
+                if evento.startswith('P'):
+                    ax.text((a+b)/2,e['cpu'],evento,rotation=90,ha='center',va='center',fontsize=7,clip_on=True)
+            ax.set(xlim=(inicio,fim),yticks=range(r['config']['cpus']),yticklabels=[f'CPU {i}' for i in range(r['config']['cpus'])])
+            ax.set_xticks(range(inicio,fim+1,10));ax.tick_params(labelsize=8)
+            ax.grid(axis='x',alpha=.15)
+        axs[0].legend(handles=[Patch(color='#334155',label='TROCA'),Patch(color='#cbd5e1',label='OCIOSA')],fontsize=7,loc='upper left',bbox_to_anchor=(0,1.3),ncol=2)
+        axs[-1].set_xlabel('Tempo simulado')
+        fig.tight_layout();fig.savefig(gantts_relatorio/(r['id']+'.png'),dpi=200);plt.close(fig)
+    fig,axs=plt.subplots(2,1,figsize=(7.2,7))
     for ax,cenario in zip(axs,cenarios):
         for j,cpus in enumerate([1,4]):
             ax.bar([x+(j-.5)*.36 for x in range(7)], [r['espera_media'] for r in selecionar(cenario,cpus)],width=.35,label=f'{cpus} CPU(s)')
         ax.set(xticks=range(7),xticklabels=rotulos,yscale='log',ylabel='Espera média (escala log)',title=cenario)
         ax.legend()
     fig.tight_layout(); fig.savefig(GRAF/'espera.png',dpi=180); plt.close(fig)
-    fig,axs=plt.subplots(1,3,figsize=(13,4.4))
+    fig,axs=plt.subplots(3,1,figsize=(7.2,8.8))
     for ax,chave,titulo in zip(axs,['espera_media','resposta_media','trocas'],['Espera média','Resposta média','Trocas de contexto']):
         for cenario in cenarios:
             for cpus in [1,4]:
@@ -68,7 +83,7 @@ def main():
         ax.grid(alpha=.2)
     axs[-1].legend(fontsize=8)
     fig.tight_layout(); fig.savefig(GRAF/'quantum.png',dpi=180); plt.close(fig)
-    fig,ax=plt.subplots(figsize=(11,4))
+    fig,ax=plt.subplots(figsize=(7.2,3.6))
     for cenario in cenarios:
         ax.plot(rotulos,[r['speedup'] for r in selecionar(cenario,4)],marker='o',label=cenario)
     ax.axhline(4,color='gray',linestyle='--',label='Referência ideal = 4')
@@ -87,6 +102,8 @@ def main():
     def par(t):
         story.append(Paragraph(escape(t),styles['CorpoM2'])); md.append(t+'\n')
     def tabela(headers,linhas,widths=None):
+        if widths:
+            widths=[v*515/sum(widths) for v in widths]
         dados=[[Paragraph(escape(str(x)),styles['CelulaM2']) for x in row] for row in [headers]+linhas]
         tab=Table(dados,colWidths=widths,repeatRows=1,hAlign='LEFT')
         tab.setStyle(TableStyle([('BACKGROUND',(0,0),(-1,0),colors.HexColor('#e8e8e8')),
@@ -99,6 +116,7 @@ def main():
         md.append('| '+' | '.join(headers)+' |\n| '+' | '.join(['---']*len(headers))+' |\n'+
                   '\n'.join('| '+' | '.join(str(x) for x in row)+' |' for row in linhas)+'\n')
     def figura(path,w=760):
+        w=min(w,515)
         from PIL import Image as PILImage
         with PILImage.open(path) as im: h=w*im.height/im.width
         story.append(Image(str(path),width=w,height=h))
@@ -134,7 +152,10 @@ def main():
         linhas=[r for r in rs if r['cenario']==cenario]
         par('Valores de tempo em unidades simuladas. Identificação: cenário-CPUs-política[-quantum]-memória. Todos os casos usam 256 quadros e custo de troca 1. Speedup e eficiência indicam o par 1/4 CPUs da mesma configuração, repetidos nas duas linhas.')
         headers=['Execução','Fim','Espera média','Espera máx.','Turn. médio','Resp. média','Trocas','Faults','Taxa %','Speedup','Efic. %']
-        tabela(headers,[[nome(r)]+[f(r[k]) for k in ['makespan','espera_media','espera_maxima','turnaround_medio','resposta_media','trocas','faults']]+[f(100*r['taxa_faults']),f(r['speedup']),f(100*r['eficiencia'])] for r in linhas], [154]+[60]*10)
+        tabela(headers[:7],[[nome(r)]+[f(r[k]) for k in ['makespan','espera_media','espera_maxima','turnaround_medio','resposta_media','trocas']] for r in linhas],[145]+[61]*6)
+        quebra();titulo('4. Resultados - cenário '+('A' if cenario==cenarios[0] else 'B')+' (continuação)')
+        par('Faltas de página e ganho de desempenho para as mesmas configurações da tabela anterior.')
+        tabela(['Execução','Faults','Taxa %','Speedup','Efic. %'],[[nome(r),r['faults'],f(100*r['taxa_faults']),f(r['speedup']),f(100*r['eficiencia'])] for r in linhas],[170,86,86,86,86])
     quebra(); titulo('5. Comparação dos escalonadores')
     figura(GRAF/'espera.png',720)
     par('O gráfico apresenta a espera média com LRU. O eixo vertical usa escala logarítmica porque os tempos de 1 e 4 CPUs são muito diferentes. Os valores exatos estão nas tabelas anteriores.')
@@ -160,7 +181,7 @@ def main():
                       if (e['evento'].startswith('P') if tipo=='útil' else e['evento']==tipo))
                   for tipo in ['útil','TROCA','OCIOSA']}
         par(f'{nome(exemplo)}, janela [0,200): soma entre CPUs de {por_tipo["útil"]} unidades úteis, {por_tipo["TROCA"]} de troca e {por_tipo["OCIOSA"]} ociosas. São parcelas da janela, distintas dos totais da execução no apêndice.')
-        figura(gantts_relatorio/(exemplo['id']+'.png'),600)
+        figura(gantts_relatorio/(exemplo['id']+'.png'),410)
     par('No cenário A/FCFS, a fila inicial de 1.000 processos faz a janela inicial ser dominada por instalação de contextos e primeiras faltas: mesmo ocupada, a CPU ainda não produz trabalho útil. No cenário B com 4 CPUs, chegadas espaçadas permitem retornos atendidos mais cedo; aparecem intervalos úteis e ociosos. O Gantt evidencia por que utilização que inclui troca não equivale a produtividade.')
     quebra(); titulo('7. FIFO e LRU')
     pares=[]
@@ -203,8 +224,8 @@ def main():
         canvas.setFont('Arial',9)
         canvas.setFillColor(colors.black)
         canvas.drawString(36,20,'Sistemas Operacionais - Trabalho M2')
-        canvas.drawRightString(806,20,str(doc.page))
-    doc=SimpleDocTemplate(str(OUT/'relatorio_m2.pdf'),pagesize=landscape(A4),rightMargin=36,leftMargin=36,topMargin=30,bottomMargin=36,
+        canvas.drawRightString(A4[0]-36,20,str(doc.page))
+    doc=SimpleDocTemplate(str(OUT/'relatorio_m2.pdf'),pagesize=A4,rightMargin=36,leftMargin=36,topMargin=30,bottomMargin=36,
                           title='Trabalho M2 - Sistemas Operacionais',author='Matheus Thurow; Rodrigo Nicola; Eduardo Bez')
     doc.build(story,onFirstPage=rodape,onLaterPages=rodape)
     capa=BytesIO()
